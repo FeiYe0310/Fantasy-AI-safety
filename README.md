@@ -72,6 +72,8 @@ pnpm preview
 
 The Vite base path is configured for GitHub Pages at `/Fantasy-AI-safety/`. Pushes to `main` deploy through `.github/workflows/deploy.yml`.
 
+Deployment status is tracked in the repository's GitHub Actions tab.
+
 ## Contributing
 
 You can contribute through three paths:

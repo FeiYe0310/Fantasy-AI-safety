@@ -1,6 +1,9 @@
-# Pear.No Clone
+<div align="center">
+<h1>Pear.No Clone</h1>
 
 [中文文档](https://github.com/amasun/Pear-no/blob/main/README.md) · [English](https://github.com/amasun/Pear-no/blob/main/README.en.md) · [REPLICATION_LESSONS](https://github.com/amasun/Pear-no/blob/main/REPLICATION_LESSONS.md)
+
+[L4 开发进度](L4_DEVELOPMENT_PROGRESS.md) · [L4 Development Progress](L4_DEVELOPMENT_PROGRESS.en.md)
 
 **在线预览：[https://amasun.github.io/Pear-no/](https://amasun.github.io/Pear-no/)**
 
@@ -15,6 +18,7 @@
   <strong>Scroll-driven creative web experience recreation</strong><br />
   WebGL shaders · Canvas sequences · Responsive storytelling · Resource-safe transitions
 </p>
+</div>
 
 ![Pear No Clone banner](docs/assets/readme-banner.png)
 

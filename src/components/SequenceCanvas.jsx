@@ -32,7 +32,8 @@ export default function SequenceCanvas({
   sensitivity = 30,
   showDebug = false,
   sharedVideoRef,
-  onPhaseState
+  onPhaseState,
+  videoFrameRef
 }) {
   const flyCanvasRef = useRef(null);
   const transCanvasRef = useRef(null);
@@ -270,7 +271,11 @@ export default function SequenceCanvas({
         drawSparkleStar(linesCtx, v2, h2, 9, 1.0); // Bottom-Right (rd)
 
         // C) Perform Blue-Sky Chromakey Alpha Masking on BOTH Lines & Stars
-        const mediaSource = (video && video.readyState >= 2) ? video : (poster.complete ? poster : null);
+        const videoFrameReady = !video || !('requestVideoFrameCallback' in video) || videoFrameRef?.current?.ready;
+        const mediaSource = (video && video.readyState >= 2 && videoFrameReady) ? video : (poster.complete ? poster : null);
+        // Both canvases read the same presented video frame. The Hero texture
+        // upload is gated by the shared frame clock, while the mask is rebuilt
+        // every render so calibration, resize, and layout changes stay live.
         if (mediaSource) {
           try {
             const vw = mediaSource.videoWidth || mediaSource.naturalWidth || 1920;

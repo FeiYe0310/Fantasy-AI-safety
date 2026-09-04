@@ -36,7 +36,8 @@ export default function HeroCanvas({
   currentFilmIndex = 0,
   maskPosX = 0.5,
   zoomScale = 1,
-  sharedVideoRef
+  sharedVideoRef,
+  videoFrameRef
 }) {
   const canvasRef = useRef(null);
   const stateRef = useRef({ scrollProgress, maskPosX, zoomScale });
@@ -194,6 +195,7 @@ export default function HeroCanvas({
     let uploadedCoda = null;
     let uploadedTree = null;
     let uploadedPlan = null;
+    let uploadedVideoFrame = -1;
 
     const render = (now) => {
       raf = requestAnimationFrame(render);
@@ -212,8 +214,13 @@ export default function HeroCanvas({
       const burn = clamp((modelProgress - 0.775) / 0.14);
       const treatment = Math.max(Math.sin(Math.PI * clamp((intro - 0.4) / 0.6)), burn > 0 && burn < 1 ? Math.sin(Math.PI * burn) : 0);
 
-      const heroSource = video.readyState >= 2 ? video : poster.complete ? poster : null;
-      if (heroSource) upload(0, heroSource, 'uResA');
+      const videoFrameReady = !('requestVideoFrameCallback' in video) || videoFrameRef?.current?.ready;
+      const heroSource = video.readyState >= 2 && videoFrameReady ? video : poster.complete ? poster : null;
+      const presentedFrames = videoFrameRef?.current?.presentedFrames ?? -1;
+      if (heroSource && (heroSource !== video || presentedFrames < 0 || presentedFrames !== uploadedVideoFrame)) {
+        upload(0, heroSource, 'uResA');
+        if (heroSource === video) uploadedVideoFrame = presentedFrames;
+      }
       if (intro >= 0.999 && !video.paused) video.pause();
       else if (intro < 0.999 && video.paused) video.play().catch(() => {});
 
@@ -341,7 +348,7 @@ export default function HeroCanvas({
       gl.deleteBuffer(buffer);
       textures.forEach((texture) => gl.deleteTexture(texture));
     };
-  }, [currentFilmIndex]);
+  }, [currentFilmIndex, videoFrameRef]);
 
   return <canvas ref={canvasRef} className="gl" aria-hidden="true" />;
 }

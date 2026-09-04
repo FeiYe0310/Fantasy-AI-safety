@@ -17,6 +17,7 @@ import LoadingState from './components/LoadingState';
 
 export default function App() {
   const heroVideoRef = useRef(null);
+  const videoFrameRef = useRef({ presentedFrames: 0, mediaTime: 0, ready: false });
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrollY, setScrollY] = useState(0);
   // Default -1 on page load so no rail chapter is active initially (all rail ticks are short lines)
@@ -69,6 +70,27 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('pear_mask_sensitivity', sensitivity.toString());
   }, [sensitivity]);
+
+  useEffect(() => {
+    const video = heroVideoRef.current;
+    if (!video || !('requestVideoFrameCallback' in video)) return undefined;
+
+    let active = true;
+    const notifyFrame = (_now, metadata) => {
+      if (!active) return;
+      videoFrameRef.current = {
+        presentedFrames: metadata.presentedFrames,
+        mediaTime: metadata.mediaTime,
+        ready: true
+      };
+      video.requestVideoFrameCallback(notifyFrame);
+    };
+
+    video.requestVideoFrameCallback(notifyFrame);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -197,6 +219,7 @@ export default function App() {
             maskPosX={maskPosX}
             zoomScale={zoomScale}
             sharedVideoRef={heroVideoRef}
+            videoFrameRef={videoFrameRef}
           />
 
           {/* 2D Sequence Canvases (flysky, trans, lines overlay with chromakey mask) */}
@@ -209,6 +232,7 @@ export default function App() {
             sensitivity={sensitivity}
             showDebug={showDebug}
             sharedVideoRef={heroVideoRef}
+            videoFrameRef={videoFrameRef}
             onPhaseState={setResourcePhase}
           />
 

@@ -1,0 +1,48 @@
+name: Join Fantasy AI Safety
+description: Introduce yourself and propose a contribution to the verification layer.
+title: "[Join] "
+labels:
+  - community
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in Fantasy AI Safety. A short, concrete introduction is enough; no cover letter is required.
+  - type: input
+    id: name
+    attributes:
+      label: Name or handle
+      placeholder: How should we refer to you?
+    validations:
+      required: true
+  - type: dropdown
+    id: path
+    attributes:
+      label: Contribution path
+      options:
+        - Research
+        - Build
+        - Challenge / red team
+        - Writing or visual communication
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: What problem do you want to work on?
+      description: A research question, implementation idea, failure mode, or communication challenge.
+    validations:
+      required: true
+  - type: input
+    id: links
+    attributes:
+      label: Relevant links
+      description: GitHub, papers, writing, portfolio, or prior work. Optional.
+  - type: checkboxes
+    id: public
+    attributes:
+      label: Public collaboration
+      options:
+        - label: I understand that this issue and its contents will be public.
+          required: true

@@ -1,276 +1,270 @@
-import React, { useState, useEffect, useRef } from 'react';
-import HeroCanvas from './components/HeroCanvas';
-import SequenceCanvas from './components/SequenceCanvas';
-import Navigation from './components/Navigation';
-import SignSection from './components/SignSection';
-import FaqSection from './components/FaqSection';
-import ApplicationModal from './components/ApplicationModal';
-import FooterSection from './components/FooterSection';
-import MaskCalibrator from './components/MaskCalibrator';
-import TermsNarrative from './components/TermsNarrative';
-import ApplicationScene from './components/ApplicationScene';
-import { mapScrollProgress, rawProgressFromMapped, TOTAL_ROAD } from './timeline';
-import FooterTransitionCanvas from './components/FooterTransitionCanvas';
-import { FILMS } from './films';
-import CreditNote from './components/CreditNote';
-import LoadingState from './components/LoadingState';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import SafetyField from './SafetyField';
+
+const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+const smooth = (value) => {
+  const t = clamp(value);
+  return t * t * (3 - 2 * t);
+};
+
+function useSectionProgress(ref) {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const element = ref.current;
+      if (!element) return;
+      const rect = element.getBoundingClientRect();
+      const distance = Math.max(1, element.offsetHeight - window.innerHeight);
+      setProgress(clamp(-rect.top / distance));
+    };
+    const requestUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+    return () => {
+      window.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [ref]);
+
+  return progress;
+}
+
+function opacityWindow(progress, enter, fullStart, fullEnd, exit) {
+  const enterOpacity = smooth((progress - enter) / Math.max(0.001, fullStart - enter));
+  const exitOpacity = 1 - smooth((progress - fullEnd) / Math.max(0.001, exit - fullEnd));
+  return clamp(Math.min(enterOpacity, exitOpacity));
+}
+
+function BrandMark() {
+  return (
+    <span className="brand-mark" aria-hidden="true">
+      <i className="brand-mark__gold" />
+      <i className="brand-mark__jade" />
+      <b />
+    </span>
+  );
+}
+
+const researchDirections = [
+  {
+    number: '01',
+    title: 'Scalable verification',
+    question: 'How can verification scale faster than generation?',
+    body: 'Verifier models, process supervision, multi-model critique, debate, and evidence-carrying outputs that turn plausible answers into independently checkable claims.',
+    tags: 'VERIFIERS / PROCESS SUPERVISION / CRITIQUE',
+    tone: 'gold',
+  },
+  {
+    number: '02',
+    title: 'Agent monitoring & control',
+    question: 'How do we keep autonomous systems observable and interruptible?',
+    body: 'Runtime monitors, tool permissions, audit trails, tripwires, safe interruption, and staged authorization before high-impact actions reach the world.',
+    tags: 'MONITORING / CONTROL / INTERRUPTIBILITY',
+    tone: 'ivory',
+  },
+  {
+    number: '03',
+    title: 'Mechanistic auditing & repair',
+    question: 'Can we repair the cause of failure—not only the symptom?',
+    body: 'Mechanistic interpretability, causal localization, anomalous representations, signals of deception or goal drift, and interventions grounded in internal evidence.',
+    tags: 'INTERPRETABILITY / CAUSAL EVIDENCE / REPAIR',
+    tone: 'jade',
+  },
+];
 
 export default function App() {
-  const heroVideoRef = useRef(null);
-  const videoFrameRef = useRef({ presentedFrames: 0, mediaTime: 0, ready: false });
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [scrollY, setScrollY] = useState(0);
-  // Default -1 on page load so no rail chapter is active initially (all rail ticks are short lines)
-  const [activeChapter, setActiveChapter] = useState(-1);
-  const [faqRotation, setFaqRotation] = useState(0);
-  const [isApplyOpen, setIsApplyOpen] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [posterReady, setPosterReady] = useState(false);
-  const [videoReady, setVideoReady] = useState(false);
-  const [bootError, setBootError] = useState(false);
-  const [resourcePhase, setResourcePhase] = useState('');
+  const roadRef = useRef(null);
+  const progress = useSectionProgress(roadRef);
+  const base = import.meta.env.BASE_URL;
+  const heroOpacity = 1 - smooth((progress - 0.055) / 0.1);
+  const soteriaOpacity = opacityWindow(progress, 0.08, 0.15, 0.34, 0.49);
+  const nuwaOpacity = opacityWindow(progress, 0.23, 0.3, 0.47, 0.59);
+  const contactOpacity = opacityWindow(progress, 0.47, 0.54, 0.71, 0.79);
+  const fusionOpacity = smooth((progress - 0.72) / 0.1);
+  const thesisOpacity = smooth((progress - 0.78) / 0.12);
+  const flashOpacity = Math.max(0, 1 - Math.abs(progress - 0.735) / 0.025);
+  const soteriaX = -42 + smooth((progress - 0.1) / 0.35) * 18;
+  const nuwaX = 44 - smooth((progress - 0.24) / 0.28) * 18;
 
-  // Random initial hero film selection matching original site behavior
-  const [initialFilmIndex] = useState(() => {
-    if (typeof window === 'undefined') return 0;
-    const param = (new URLSearchParams(window.location.search).get('hero') || '').toLowerCase();
-    const foundIdx = FILMS.findIndex(f => f.id === param);
-    if (foundIdx >= 0) return foundIdx;
-    return Math.floor(Math.random() * FILMS.length);
-  });
-
-  // Calibration state: default object-pos x = 50% (0.50)
-  const [maskPosX, setMaskPosX] = useState(() => {
-    const saved = localStorage.getItem('pear_mask_pos_x');
-    return saved ? parseFloat(saved) : 0.50;
-  });
-
-  const [zoomScale, setZoomScale] = useState(() => {
-    const saved = localStorage.getItem('pear_zoom_scale');
-    return saved ? parseFloat(saved) : 1.0;
-  });
-
-  // Sky sensitivity default set to maximum (30)
-  const [sensitivity, setSensitivity] = useState(() => {
-    const saved = localStorage.getItem('pear_mask_sensitivity');
-    return saved ? parseInt(saved, 10) : 30;
-  });
-
-  const [showDebug, setShowDebug] = useState(false);
-  const [calibratorOpen, setCalibratorOpen] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem('pear_mask_pos_x', maskPosX.toString());
-  }, [maskPosX]);
-
-  useEffect(() => {
-    localStorage.setItem('pear_zoom_scale', zoomScale.toString());
-  }, [zoomScale]);
-
-  useEffect(() => {
-    localStorage.setItem('pear_mask_sensitivity', sensitivity.toString());
-  }, [sensitivity]);
-
-  useEffect(() => {
-    const video = heroVideoRef.current;
-    if (!video || !('requestVideoFrameCallback' in video)) return undefined;
-
-    let active = true;
-    const notifyFrame = (_now, metadata) => {
-      if (!active) return;
-      videoFrameRef.current = {
-        presentedFrames: metadata.presentedFrames,
-        mediaTime: metadata.mediaTime,
-        ready: true
-      };
-      video.requestVideoFrameCallback(notifyFrame);
-    };
-
-    video.requestVideoFrameCallback(notifyFrame);
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const currentScroll = window.scrollY;
-      const rawProgress = Math.min(Math.max(currentScroll / (maxScroll || 1), 0), 1);
-      const progress = mapScrollProgress(rawProgress, window.innerWidth <= 720);
-      
-      setScrollProgress(progress);
-      setScrollY(currentScroll);
-
-      // Production rail anchors: 0.012, 0.232, 0.400 and 0.628.
-      if (progress < 0.012) {
-        setActiveChapter(-1);
-      } else if (progress < 0.232) {
-        setActiveChapter(0);
-      } else if (progress < 0.4) {
-        setActiveChapter(1);
-      } else if (progress < 0.628) {
-        setActiveChapter(2);
-      } else {
-        setActiveChapter(3);
-      }
-
-      setFaqRotation(progress * 720);
-    };
-
-    const handlePointerMove = (e) => {
-      setMousePos({
-        x: (e.clientX / window.innerWidth - 0.5) * 2,
-        y: (e.clientY / window.innerHeight - 0.5) * 2
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
-
-    const timer = setTimeout(() => {
-      if (!posterReady && !videoReady) setBootError(true);
-    }, 10000);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('pointermove', handlePointerMove);
-      clearTimeout(timer);
-    };
-  }, [posterReady, videoReady]);
-
-  const initialPoster = FILMS[initialFilmIndex].poster;
-  const bootLoaded = posterReady || videoReady;
-  const initialPosition = FILMS[initialFilmIndex].pos[window.innerWidth < 768 ? 0 : window.innerWidth < 1180 ? 1 : 2];
-  const scrollToProgress = (progress) => {
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const rawProgress = rawProgressFromMapped(progress, window.innerWidth <= 720);
-    setIsApplyOpen(false);
-    window.scrollTo({ top: maxScroll * rawProgress, behavior: 'smooth' });
-  };
-
-  const scrollToApplication = () => {
-    scrollToProgress(4600 / TOTAL_ROAD);
-  };
+  const activeChapter = useMemo(() => {
+    if (progress < 0.18) return 'opening';
+    if (progress < 0.34) return 'soteria';
+    if (progress < 0.5) return 'nuwa';
+    if (progress < 0.76) return 'contact';
+    return 'fusion';
+  }, [progress]);
 
   return (
-    <main id="top" aria-busy={!bootLoaded && !bootError}>
-      <LoadingState
-        ready={bootLoaded}
-        error={bootError}
-        phase={resourcePhase}
-        onRetry={() => window.location.reload()}
-      />
-      {/* Floating Mask Calibration Widget */}
-      <MaskCalibrator
-        maskPosX={maskPosX}
-        setMaskPosX={setMaskPosX}
-        zoomScale={zoomScale}
-        setZoomScale={setZoomScale}
-        sensitivity={sensitivity}
-        setSensitivity={setSensitivity}
-        showDebug={showDebug}
-        setShowDebug={setShowDebug}
-        scrollProgress={scrollProgress}
-        scrollY={scrollY}
-        isVisible={calibratorOpen}
-        onVisibilityChange={setCalibratorOpen}
-      />
+    <main>
+      <a className="skip-link" href="#mission">Skip cinematic introduction</a>
 
-      <div className="stage">
-        <div className="pin">
-          {/* Boot Image Fallback */}
+      <header className="site-header">
+        <a className="brand" href="#top" aria-label="Fantasy AI Safety home">
+          <BrandMark />
+          <span>FANTASY / AI SAFETY</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="#guardians">Guardians</a>
+          <a href="#mission">Mission</a>
+          <a href="#research">Research</a>
+          <a href="#join">Join us</a>
+          <a href="https://github.com/FeiYe0310/Fantasy-AI-safety" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </nav>
+      </header>
+
+      <section className="intro-road" id="top" ref={roadRef} aria-label="The guardians of verification">
+        <div className="intro-stage">
+          <SafetyField progress={progress} />
+
+          <div className="progress-rail" aria-hidden="true">
+            {['opening', 'soteria', 'nuwa', 'contact', 'fusion'].map((chapter) => (
+              <i key={chapter} className={chapter === activeChapter ? 'is-active' : ''} />
+            ))}
+          </div>
+
+          <div className="hero-copy" style={{ opacity: heroOpacity }}>
+            <p className="eyebrow">OPEN RESEARCH · AI SAFETY</p>
+            <h1>More capability<br />needs more verification.</h1>
+            <p className="hero-copy__cn">让每一次强大行动，都拥有足够多的验证。</p>
+            <a className="text-link" href="#mission">Enter the thesis <span>↓</span></a>
+          </div>
+
           <img
-            className={`boot ${bootLoaded ? 'off' : ''}`}
-            fetchPriority="high"
-            alt=""
-            aria-hidden="true"
-            onLoad={() => setPosterReady(true)}
-            onError={() => setPosterReady(false)}
-            src={initialPoster}
-            style={{
-              filter: 'blur(5.1px) saturate(0.925) brightness(0.984)',
-              transform: 'scale(1.0726)',
-              objectPosition: `${Math.min(1, Math.max(0, initialPosition + maskPosX - 0.5)) * 100}% 50%`
-            }}
+            className="guardian guardian--soteria"
+            src={`${base}guardians/soteria.png`}
+            alt="Soteria, rendered in warm antique-gold light"
+            style={{ opacity: soteriaOpacity, transform: `translate3d(${soteriaX}vw, 4vh, 0) scale(${0.9 + soteriaOpacity * 0.08})` }}
           />
+          <article className="guardian-copy guardian-copy--soteria" style={{ opacity: soteriaOpacity }} id="guardians">
+            <p className="eyebrow eyebrow--gold">01 · THE BOUNDARY</p>
+            <h2>Soteria</h2>
+            <h3>Safety before harm.</h3>
+            <p>The Greek personification of safety and deliverance. She stands for prevention, constraint, and the discipline to verify before an action reaches the world.</p>
+            <span className="tag tag--gold">PREVENTION / CONSTRAINT / VERIFICATION</span>
+          </article>
 
-          {/* One video clock shared by WebGL and the chroma-key mask. */}
-          <video
-            ref={heroVideoRef}
-            src={FILMS[initialFilmIndex].src}
-            muted
-            loop
-            playsInline
-            autoPlay
-            preload="auto"
-            crossOrigin="anonymous"
-            aria-hidden="true"
-            style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: '1px', height: '1px' }}
-            onLoadedData={() => setVideoReady(true)}
-            onCanPlay={() => setVideoReady(true)}
-            onError={() => setVideoReady(false)}
+          <img
+            className="guardian guardian--nuwa"
+            src={`${base}guardians/nuwa.png`}
+            alt="Nüwa, rendered in luminous jade, cinnabar, indigo and ivory"
+            style={{ opacity: nuwaOpacity, transform: `translate3d(${nuwaX}vw, 1vh, 0) scale(${0.86 + nuwaOpacity * 0.08})` }}
           />
+          <article className="guardian-copy guardian-copy--nuwa" style={{ opacity: nuwaOpacity }}>
+            <p className="eyebrow eyebrow--jade">02 · THE REPAIR</p>
+            <h2>Nüwa</h2>
+            <h3>Safety after rupture.</h3>
+            <p>The creator who mended a broken sky. She stands for locating failure, repairing structure, and recovering when no boundary can anticipate everything.</p>
+            <span className="tag tag--jade">CREATION / REPAIR / RECOVERY</span>
+          </article>
 
-          {/* WebGL Stage Canvas */}
-          <HeroCanvas
-            scrollProgress={scrollProgress}
-            currentFilmIndex={initialFilmIndex}
-            maskPosX={maskPosX}
-            zoomScale={zoomScale}
-            sharedVideoRef={heroVideoRef}
-            videoFrameRef={videoFrameRef}
-          />
+          <div className="contact-frame" style={{ opacity: contactOpacity }}>
+            <img src={`${base}guardians/contact-hands.png`} alt="Soteria and Nüwa performing a mirrored fusion movement as their fingertips meet in a bright gold-and-jade contact point" />
+            <p className="eyebrow">THE CONTACT · VERIFICATION MEETS REPAIR</p>
+            <span aria-hidden="true">SCROLL TO COMPLETE THE CIRCUIT</span>
+          </div>
 
-          {/* 2D Sequence Canvases (flysky, trans, lines overlay with chromakey mask) */}
-          <SequenceCanvas
-            scrollProgress={scrollProgress}
-            mousePos={mousePos}
-            activeChapter={initialFilmIndex}
-            maskPosX={maskPosX}
-            zoomScale={zoomScale}
-            sensitivity={sensitivity}
-            showDebug={showDebug}
-            sharedVideoRef={heroVideoRef}
-            videoFrameRef={videoFrameRef}
-            onPhaseState={setResourcePhase}
-          />
+          <div className="fusion-reveal" style={{ opacity: fusionOpacity }}>
+            <img src={`${base}guardians/fusion.png`} alt="The fused guardian, combining Soteria's golden order with Nüwa's jade repair" />
+          </div>
 
-          <TermsNarrative scrollProgress={scrollProgress} />
+          <div className="contact-flash" style={{ opacity: flashOpacity }} aria-hidden="true" />
 
-          <ApplicationScene scrollProgress={scrollProgress} />
-
-          <FooterTransitionCanvas scrollProgress={scrollProgress} onPhaseState={setResourcePhase} />
-
-          {/* SVG Handwriting Signature */}
-          <SignSection
-            scrollProgress={scrollProgress}
-          />
-
-          {/* Full UI Overlay */}
-          <Navigation
-            activeChapter={activeChapter}
-            scrollProgress={scrollProgress}
-            onOpenApply={scrollToApplication}
-            onNavigate={scrollToProgress}
-            calibratorOpen={calibratorOpen}
-            onToggleCalibrator={() => setCalibratorOpen((open) => !open)}
-          />
-
-          {/* 3D FAQ Cylindrical Carousel */}
-          <FaqSection rotation={faqRotation} scrollProgress={scrollProgress} />
+          <div className="thesis" style={{ opacity: thesisOpacity }}>
+            <p className="eyebrow">THE FUSION</p>
+            <h2>Safety needs both.</h2>
+            <p>Constraint without repair becomes brittle.<br />Creation without verification becomes dangerous.</p>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Footer Section */}
-      <FooterSection scrollProgress={scrollProgress} />
+      <section className="mission-section" id="mission">
+        <div className="section-rule"><span>03</span><b>MISSION</b><i /></div>
+        <div className="mission-grid">
+          <div>
+            <p className="eyebrow">OUR MISSION</p>
+            <h2>Abundant<br /><span>verification tokens.</span></h2>
+          </div>
+          <div className="mission-copy">
+            <p>Powerful systems receive abundant compute to generate an answer, but far less budget to challenge, verify, and repair it.</p>
+            <p>We work toward systems where every consequential action can carry enough independent checks, counterarguments, causal evidence, and recovery steps before it reaches the world.</p>
+            <a className="pill-link" href="https://github.com/FeiYe0310/Fantasy-AI-safety" target="_blank" rel="noreferrer">Follow the research <span>↗</span></a>
+          </div>
+        </div>
+        <div className="token-logic" aria-label="Verification token model">
+          <div><span>GENERATION TOKENS</span><b>answer</b></div>
+          <i>→</i>
+          <div className="token-logic__verification"><span>VERIFICATION TOKENS</span><b>evidence · critique · revision · confidence</b></div>
+        </div>
+      </section>
 
-      {/* Application Modal */}
-      <ApplicationModal
-        isOpen={isApplyOpen}
-        onClose={() => setIsApplyOpen(false)}
-      />
-      <CreditNote />
+      <section className="research-section" id="research">
+        <div className="section-rule"><span>04</span><b>RESEARCH DIRECTIONS</b><i /></div>
+        <header className="research-header">
+          <p className="eyebrow">OPEN QUESTIONS</p>
+          <h2>Build the<br />verification layer.</h2>
+          <p>Three connected research programs, one shared constraint: claims about safety should carry evidence strong enough to be challenged.</p>
+        </header>
+        <div className="research-list">
+          {researchDirections.map((direction) => (
+            <article className={`research-card research-card--${direction.tone}`} key={direction.number}>
+              <div className="research-card__number">{direction.number}</div>
+              <div>
+                <p className="eyebrow">{direction.tags}</p>
+                <h3>{direction.title}</h3>
+                <h4>{direction.question}</h4>
+                <p>{direction.body}</p>
+                <a href="https://github.com/FeiYe0310/Fantasy-AI-safety/issues/new?labels=research" target="_blank" rel="noreferrer">Open a research question <span>↗</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="principle-section" aria-labelledby="principle-title">
+        <img src={`${base}guardians/fusion.png`} alt="" aria-hidden="true" />
+        <div>
+          <p className="eyebrow">THE PRINCIPLE</p>
+          <h2 id="principle-title">Verification is not the opposite of creation.</h2>
+          <p>It is how creation survives contact with reality.</p>
+          <p className="principle-section__cn">验证不是创造的对立面。它让创造经得起现实。</p>
+        </div>
+      </section>
+
+      <section className="join-section" id="join">
+        <div className="section-rule"><span>05</span><b>JOIN US</b><i /></div>
+        <div className="join-grid">
+          <div>
+            <p className="eyebrow">OPEN COLLABORATION</p>
+            <h2>Help build the<br />verification layer.</h2>
+          </div>
+          <div className="join-copy">
+            <p>We welcome researchers, engineers, red-teamers, technical writers, and visual storytellers who want powerful AI systems to remain observable, challengeable, interruptible, and repairable.</p>
+            <ul>
+              <li><b>Research</b><span>Propose open questions, reproduce experiments, and publish notes.</span></li>
+              <li><b>Build</b><span>Implement verifiers, evaluations, monitors, and interpretability tools.</span></li>
+              <li><b>Challenge</b><span>Find failure modes, design red-team tasks, and audit assumptions.</span></li>
+            </ul>
+            <div className="join-actions">
+              <a className="primary-action" href="https://github.com/FeiYe0310/Fantasy-AI-safety/issues/new?template=join-us.yml" target="_blank" rel="noreferrer">Introduce yourself <span>↗</span></a>
+              <a href="https://github.com/FeiYe0310/Fantasy-AI-safety" target="_blank" rel="noreferrer">Contribute on GitHub ↗</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="site-footer">
+        <BrandMark />
+        <p>FANTASY AI SAFETY</p>
+        <h2>More capability<br />needs more verification.</h2>
+        <div><span>OPEN RESEARCH · 2026</span><a href="https://github.com/FeiYe0310/Fantasy-AI-safety" target="_blank" rel="noreferrer">GITHUB ↗</a></div>
+      </footer>
     </main>
   );
 }

@@ -5,6 +5,7 @@
 .olive-visual{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;will-change:opacity,transform;transform-origin:55% 45%}
 .olive-visual--0,.olive-visual--1{object-position:50% 18%}
 .olive-grade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(237,248,250,.96) 0%,rgba(237,248,250,.68) 27%,rgba(237,248,250,.1) 54%,transparent 76%),linear-gradient(0deg,rgba(255,255,255,.22),transparent 34%);pointer-events:none}
+.olive-intro-grade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,43,83,.58) 0%,rgba(5,43,83,.3) 33%,transparent 65%);pointer-events:none}
 .guardian-pair{position:absolute;left:61%;top:64%;width:min(88vw,112svh);aspect-ratio:1672/941;z-index:-1;mix-blend-mode:multiply;will-change:opacity,transform,filter}
 .guardian-half{position:absolute;inset:0;will-change:transform}
 .guardian-half--left{clip-path:inset(0 50% 0 0)}
@@ -59,7 +60,7 @@
 
 @media(prefers-reduced-motion:reduce),(max-height:520px){
   .olive-road{height:auto;background:#eef7f7}.olive-stage{position:relative;height:auto;min-height:100svh;overflow:visible;padding:7rem 1.25rem 5rem}
-  .olive-world{position:fixed}.olive-visual{display:none}.olive-visual--5{display:block;opacity:.18!important;transform:none!important}.olive-grade{background:rgba(244,250,249,.88)}
+  .olive-world{position:fixed}.olive-visual{display:none}.olive-visual--5{display:block;opacity:.18!important;transform:none!important}.olive-grade{background:rgba(244,250,249,.88);opacity:1!important}.olive-intro-grade{display:none}
   .guardian-pair,.fusion-figure,.fusion-seed,.repair-halo,.olive-nav,.story-index,.scroll-cue{display:none}
   .olive-copy{position:relative;display:grid;gap:5rem}.olive-scene{position:relative;inset:auto;width:min(42rem,100%);opacity:1!important;transform:none!important;padding-bottom:3rem;border-bottom:1px solid rgba(18,60,76,.18);text-shadow:none}
   .olive-scene h1,.olive-scene h2,.olive-scene--0 h1,.olive-scene--1 h2,.olive-scene--2 h2{color:#123c4c;font-size:clamp(3rem,9vw,5rem)}

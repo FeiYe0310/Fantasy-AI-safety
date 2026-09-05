@@ -56,7 +56,8 @@ export default function OliveStory() {
       <div className="olive-stage">
         <div className="olive-world" aria-hidden="true">
           {visual.map((image, index) => <img key={image.src} className={`olive-visual olive-visual--${index}`} src={`${base}guardians/${image.src}`} alt="" fetchPriority={index === 0 ? 'high' : undefined} loading={index > 1 ? 'lazy' : undefined} style={{ opacity: image.opacity, transform: `scale(${1.055 - enter(progress, Math.max(0, index * .16 - .05), Math.min(1, index * .16 + .18)) * .055})` }} />)}
-          <div className="olive-grade" />
+          <div className="olive-grade" style={{ opacity: enter(progress, .27, .38) }} />
+          <div className="olive-intro-grade" style={{ opacity: 1 - enter(progress, .24, .35) }} />
         </div>
         <div className="guardian-pair" aria-hidden="true" style={{ opacity: pair, transform: `translate(-50%, -50%) scale(${.95 - approach * .08})`, filter: `blur(${fusion * 10}px)` }}>
           <div className="guardian-half guardian-half--left" style={{ transform: `translateX(${-10 + approach * 10}%)` }}><img src={`${base}guardians/pair-daylight.png`} alt="" /></div>

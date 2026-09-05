@@ -1,46 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import SafetyField from './SafetyField';
-
-const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
-const smooth = (value) => {
-  const t = clamp(value);
-  return t * t * (3 - 2 * t);
-};
-
-function useSectionProgress(ref) {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      const element = ref.current;
-      if (!element) return;
-      const rect = element.getBoundingClientRect();
-      const distance = Math.max(1, element.offsetHeight - window.innerHeight);
-      setProgress(clamp(-rect.top / distance));
-    };
-    const requestUpdate = () => {
-      if (!frame) frame = window.requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener('scroll', requestUpdate, { passive: true });
-    window.addEventListener('resize', requestUpdate);
-    return () => {
-      window.removeEventListener('scroll', requestUpdate);
-      window.removeEventListener('resize', requestUpdate);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, [ref]);
-
-  return progress;
-}
-
-function opacityWindow(progress, enter, fullStart, fullEnd, exit) {
-  const enterOpacity = smooth((progress - enter) / Math.max(0.001, fullStart - enter));
-  const exitOpacity = 1 - smooth((progress - fullEnd) / Math.max(0.001, exit - fullEnd));
-  return clamp(Math.min(enterOpacity, exitOpacity));
-}
+import React from 'react';
+import SkyStory from './SkyStory';
 
 function BrandMark() {
   return (
@@ -80,26 +39,7 @@ const researchDirections = [
 ];
 
 export default function App() {
-  const roadRef = useRef(null);
-  const progress = useSectionProgress(roadRef);
   const base = import.meta.env.BASE_URL;
-  const heroOpacity = 1 - smooth((progress - 0.055) / 0.1);
-  const soteriaOpacity = opacityWindow(progress, 0.08, 0.15, 0.34, 0.49);
-  const nuwaOpacity = opacityWindow(progress, 0.23, 0.3, 0.47, 0.59);
-  const contactOpacity = opacityWindow(progress, 0.47, 0.54, 0.71, 0.79);
-  const fusionOpacity = smooth((progress - 0.72) / 0.1);
-  const thesisOpacity = smooth((progress - 0.78) / 0.12);
-  const flashOpacity = Math.max(0, 1 - Math.abs(progress - 0.735) / 0.025);
-  const soteriaX = -42 + smooth((progress - 0.1) / 0.35) * 18;
-  const nuwaX = 44 - smooth((progress - 0.24) / 0.28) * 18;
-
-  const activeChapter = useMemo(() => {
-    if (progress < 0.18) return 'opening';
-    if (progress < 0.34) return 'soteria';
-    if (progress < 0.5) return 'nuwa';
-    if (progress < 0.76) return 'contact';
-    return 'fusion';
-  }, [progress]);
 
   return (
     <main>
@@ -119,70 +59,7 @@ export default function App() {
         </nav>
       </header>
 
-      <section className="intro-road" id="top" ref={roadRef} aria-label="The guardians of verification">
-        <div className="intro-stage">
-          <SafetyField progress={progress} />
-
-          <div className="progress-rail" aria-hidden="true">
-            {['opening', 'soteria', 'nuwa', 'contact', 'fusion'].map((chapter) => (
-              <i key={chapter} className={chapter === activeChapter ? 'is-active' : ''} />
-            ))}
-          </div>
-
-          <div className="hero-copy" style={{ opacity: heroOpacity }}>
-            <p className="eyebrow">OPEN RESEARCH · AI SAFETY</p>
-            <h1>More capability<br />needs more verification.</h1>
-            <p className="hero-copy__cn">让每一次强大行动，都拥有足够多的验证。</p>
-            <a className="text-link" href="#mission">Enter the thesis <span>↓</span></a>
-          </div>
-
-          <img
-            className="guardian guardian--soteria"
-            src={`${base}guardians/soteria.png`}
-            alt="Soteria, rendered in warm antique-gold light"
-            style={{ opacity: soteriaOpacity, transform: `translate3d(${soteriaX}vw, 4vh, 0) scale(${0.9 + soteriaOpacity * 0.08})` }}
-          />
-          <article className="guardian-copy guardian-copy--soteria" style={{ opacity: soteriaOpacity }} id="guardians">
-            <p className="eyebrow eyebrow--gold">01 · THE BOUNDARY</p>
-            <h2>Soteria</h2>
-            <h3>Safety before harm.</h3>
-            <p>The Greek personification of safety and deliverance. She stands for prevention, constraint, and the discipline to verify before an action reaches the world.</p>
-            <span className="tag tag--gold">PREVENTION / CONSTRAINT / VERIFICATION</span>
-          </article>
-
-          <img
-            className="guardian guardian--nuwa"
-            src={`${base}guardians/nuwa.png`}
-            alt="Nüwa, rendered in luminous jade, cinnabar, indigo and ivory"
-            style={{ opacity: nuwaOpacity, transform: `translate3d(${nuwaX}vw, 1vh, 0) scale(${0.86 + nuwaOpacity * 0.08})` }}
-          />
-          <article className="guardian-copy guardian-copy--nuwa" style={{ opacity: nuwaOpacity }}>
-            <p className="eyebrow eyebrow--jade">02 · THE REPAIR</p>
-            <h2>Nüwa</h2>
-            <h3>Safety after rupture.</h3>
-            <p>The creator who mended a broken sky. She stands for locating failure, repairing structure, and recovering when no boundary can anticipate everything.</p>
-            <span className="tag tag--jade">CREATION / REPAIR / RECOVERY</span>
-          </article>
-
-          <div className="contact-frame" style={{ opacity: contactOpacity }}>
-            <img src={`${base}guardians/contact-hands.png`} alt="Soteria and Nüwa performing a mirrored fusion movement as their fingertips meet in a bright gold-and-jade contact point" />
-            <p className="eyebrow">THE CONTACT · VERIFICATION MEETS REPAIR</p>
-            <span aria-hidden="true">SCROLL TO COMPLETE THE CIRCUIT</span>
-          </div>
-
-          <div className="fusion-reveal" style={{ opacity: fusionOpacity }}>
-            <img src={`${base}guardians/fusion.png`} alt="The fused guardian, combining Soteria's golden order with Nüwa's jade repair" />
-          </div>
-
-          <div className="contact-flash" style={{ opacity: flashOpacity }} aria-hidden="true" />
-
-          <div className="thesis" style={{ opacity: thesisOpacity }}>
-            <p className="eyebrow">THE FUSION</p>
-            <h2>Safety needs both.</h2>
-            <p>Constraint without repair becomes brittle.<br />Creation without verification becomes dangerous.</p>
-          </div>
-        </div>
-      </section>
+      <SkyStory />
 
       <section className="mission-section" id="mission">
         <div className="section-rule"><span>03</span><b>MISSION</b><i /></div>
@@ -228,7 +105,7 @@ export default function App() {
       </section>
 
       <section className="principle-section" aria-labelledby="principle-title">
-        <img src={`${base}guardians/fusion.png`} alt="" aria-hidden="true" />
+        <img src={`${base}guardians/fusion-daylight.png`} alt="" aria-hidden="true" />
         <div>
           <p className="eyebrow">THE PRINCIPLE</p>
           <h2 id="principle-title">Verification is not the opposite of creation.</h2>
@@ -259,7 +136,7 @@ export default function App() {
         </div>
       </section>
 
-      <footer className="site-footer">
+      <footer className="site-footer" style={{ backgroundImage: `url(${base}guardians/sky-healed.png)` }}>
         <BrandMark />
         <p>FANTASY AI SAFETY</p>
         <h2>More capability<br />needs more verification.</h2>

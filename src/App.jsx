@@ -11,10 +11,10 @@ export default function App() {
           <span>FANTASY / AI SAFETY</span>
         </a>
         <nav aria-label="Primary navigation">
-          <a href="#guardians">Guardians</a>
+          <a href="#opening">Story</a>
           <a href="#mission">Mission</a>
-          <a href="#research">Research</a>
-          <a href="#join">Join us</a>
+          <a href="#roots">Research</a>
+          <a href="#peace">Join us</a>
           <a href="https://github.com/FeiYe0310/Fantasy-AI-safety" target="_blank" rel="noreferrer">GitHub ↗</a>
         </nav>
       </header>

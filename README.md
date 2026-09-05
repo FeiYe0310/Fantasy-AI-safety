@@ -45,12 +45,13 @@ Mechanistic interpretability, causal localization, anomalous representations, go
 
 ## Experience
 
-The homepage is a scroll-driven cinematic narrative built with React and Canvas:
+The homepage is a continuous scroll-driven story built around one living object: an olive.
 
-1. Soteria and Nüwa enter as separate visual systems—golden order and jade repair.
-2. Their fingertips approach and complete a verification circuit.
-3. A fused guardian reveals the shared method.
-4. The story resolves into mission, research directions, and public contribution paths.
+1. Soteria holds the boundary while Nüwa locates and repairs the broken sky.
+2. Their fingertips meet, closing the loop between prevention and recovery.
+3. The repaired sky makes growth possible: one olive seed lands and takes root.
+4. Verification becomes the root system, monitoring the trunk, and mechanistic repair the branches.
+5. A mature olive tree offers a leaf to a white dove, carrying accountable power toward peace.
 
 The experience includes a readable `prefers-reduced-motion` version and responsive layouts for desktop and mobile.
 
@@ -70,7 +71,7 @@ pnpm build
 pnpm preview
 ```
 
-The Vite base path is configured for GitHub Pages at `/Fantasy-AI-safety/`. Production builds are published from the `gh-pages` branch; `.github/workflows/deploy.yml` documents the intended automated release pipeline.
+The Vite base path is configured for GitHub Pages at `/Fantasy-AI-safety/`. Pushes to `main` deploy through `.github/workflows/deploy.yml`.
 
 ## Contributing
 

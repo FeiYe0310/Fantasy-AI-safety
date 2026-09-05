@@ -49,11 +49,11 @@ The homepage is a continuous scroll-driven story built around one living object:
 
 1. Soteria holds the boundary while Nüwa locates and repairs the broken sky.
 2. Their fingertips meet, closing the loop between prevention and recovery.
-3. The repaired sky makes growth possible: one olive seed lands and takes root.
+3. The repaired sky makes growth possible: one olive seed lands and takes root in a fixed-camera, scroll-scrubbed photographic growth sequence.
 4. Verification becomes the root system, monitoring the trunk, and mechanistic repair the branches.
 5. A mature olive tree offers a leaf to a white dove, carrying accountable power toward peace.
 
-The experience includes a readable `prefers-reduced-motion` version and responsive layouts for desktop and mobile.
+Ten botanical keyframes are continuously blended on one canvas so the seed, roots, sprout, sapling, tree, fruit, and dove read as one evolving subject rather than a slideshow. The experience also includes a readable `prefers-reduced-motion` version and responsive layouts for desktop and mobile.
 
 ## Development
 

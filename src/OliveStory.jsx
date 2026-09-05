@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import useScrollProgress from './useScrollProgress';
+import OliveSequenceCanvas from './OliveSequenceCanvas';
 import './olive-story.css';
 
 const clamp = (value) => Math.min(1, Math.max(0, value));
@@ -36,13 +37,11 @@ export default function OliveStory() {
   const approach = enter(progress, .12, .235);
   const fusion = hold(progress, .21, .245, .305, .365);
   const repair = enter(progress, .205, .33);
+  const growthProgress = clamp((progress - .315) / .65);
+  const growthOpacity = enter(progress, .285, .37);
   const visual = [
     { src: 'sky-broken.png', opacity: 1 - enter(progress, .205, .34) },
-    { src: 'sky-healed.png', opacity: enter(progress, .19, .34) * (1 - enter(progress, .31, .39)) },
-    { src: 'olive-seed.png', opacity: hold(progress, .30, .35, .46, .53) },
-    { src: 'olive-sapling.png', opacity: hold(progress, .46, .52, .69, .75) },
-    { src: 'olive-tree-dove.png', opacity: hold(progress, .69, .75, .86, .91) },
-    { src: 'dove-flight.png', opacity: enter(progress, .855, .92) },
+    { src: 'sky-healed.png', opacity: enter(progress, .19, .34) },
   ];
   const jumpTo = (at) => {
     const element = ref.current;
@@ -56,6 +55,7 @@ export default function OliveStory() {
       <div className="olive-stage">
         <div className="olive-world" aria-hidden="true">
           {visual.map((image, index) => <img key={image.src} className={`olive-visual olive-visual--${index}`} src={`${base}guardians/${image.src}`} alt="" fetchPriority={index === 0 ? 'high' : undefined} loading={index > 1 ? 'lazy' : undefined} style={{ opacity: image.opacity, transform: `scale(${1.055 - enter(progress, Math.max(0, index * .16 - .05), Math.min(1, index * .16 + .18)) * .055})` }} />)}
+          <OliveSequenceCanvas progress={growthProgress} opacity={growthOpacity} />
           <div className="olive-grade" style={{ opacity: enter(progress, .27, .38) }} />
           <div className="olive-intro-grade" style={{ opacity: 1 - enter(progress, .24, .35) }} />
         </div>

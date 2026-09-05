@@ -32,7 +32,7 @@ a:focus-visible,button:focus-visible{outline:3px solid #ffbf41;outline-offset:6p
 .caption-layer{position:absolute;inset:0;opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .7s ease;visibility:hidden}
 .caption-layer.is-current{opacity:1;transform:none;visibility:visible}
 .story-caption .eyebrow{color:#fff;margin-bottom:1rem}
-.story-caption h1,.story-caption h2{font:300 clamp(2.9rem,6.3vw,7.1rem)/.98 "Flecha",serif;letter-spacing:-.035em;margin:0 auto;max-width:17ch}
+.story-caption h1,.story-caption h2{font:300 clamp(2.9rem,5vw,5.5rem)/.98 "Flecha",serif;letter-spacing:-.035em;margin:0 auto;max-width:26ch}
 .caption-cn{font-size:clamp(1rem,1.3vw,1.3rem);margin:1.25rem 0 .6rem;letter-spacing:.04em}
 .caption-detail{font-size:1rem;margin:0;opacity:.92}
 .duet{position:absolute;left:50%;top:65%;width:min(92vw,112svh);aspect-ratio:1672/941;z-index:2;mix-blend-mode:multiply;transform-origin:50% 39%;will-change:transform,opacity;pointer-events:none}

@@ -69,7 +69,7 @@ export default function SkyStory() {
           <div className="cloud-wash" aria-hidden="true" />
           <div className="story-caption" aria-live="off">
             {chapters.map((chapter, index) => (
-              <div className={`caption-layer ${state.chapter === index ? 'is-current' : ''}`} key={chapter.label} aria-hidden={state.chapter !== index}>
+              <div className={`caption-layer ${state.chapter === index ? 'is-current' : ''}`} key={chapter.label} aria-hidden={reduced ? undefined : state.chapter !== index}>
                 <p className="eyebrow">{String(index + 1).padStart(2, '0')} / {chapter.label} · FANTASY AI SAFETY</p>
                 {index === 0 ? <h1>{chapter.title}</h1> : <h2>{chapter.title}</h2>}
                 <p className="caption-cn">{chapter.text}</p>

@@ -11,5 +11,8 @@ dist/
 extracted_data/
 .codex-*.log
 
+# Full-resolution generation masters retained locally; the site ships optimized JPGs.
+artwork-source/
+
 # Local Xiaohongshu copy and pitch drafts
 xiaohongshu-content/

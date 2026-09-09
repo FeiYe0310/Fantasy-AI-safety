@@ -28,18 +28,10 @@ const locateClip = (progress) => {
 
 export default function OliveVideoLayer({ progress = 0, reduced = false, stress = 0 }) {
   const refs = useRef([]);
-  const progressRef = useRef(progress);
-  progressRef.current = progress;
+  const playingRef = useRef(-1);
   const active = useMemo(() => locateClip(progress), [progress]);
 
-  const syncVideo = (video, index, timeline = active) => {
-    if (!video || index !== timeline.index || !Number.isFinite(video.duration)) return;
-    const target = Math.min(Math.max(0, video.duration - .04), timeline.local * video.duration);
-    if (!video.seeking && Math.abs(video.currentTime - target) > .045) video.currentTime = target;
-  };
-
   useEffect(() => {
-    if (reduced || active.index < 0) return;
     refs.current.forEach((video, index) => {
       if (!video) return;
       const clip = CLIPS[index];
@@ -48,9 +40,20 @@ export default function OliveVideoLayer({ progress = 0, reduced = false, stress 
         video.preload = 'auto';
         video.load();
       }
-      syncVideo(video, index);
+      if (reduced || index !== active.index) video.pause();
     });
-  }, [active, progress, reduced]);
+    if (reduced || active.index < 0) {
+      playingRef.current = -1;
+      return;
+    }
+    const video = refs.current[active.index];
+    if (!video) return;
+    if (playingRef.current !== active.index) {
+      video.currentTime = 0;
+      playingRef.current = active.index;
+    }
+    if (video.paused && active.local < .96) video.play().catch(() => {});
+  }, [active.index, active.local, progress, reduced]);
 
   if (reduced) return null;
   const base = import.meta.env.BASE_URL;
@@ -67,10 +70,10 @@ export default function OliveVideoLayer({ progress = 0, reduced = false, stress 
           poster={`${base}olive-oil-story-v1/${clip.poster}`}
           preload={index < 2 ? 'auto' : 'metadata'}
           muted
+          loop
           playsInline
           disablePictureInPicture
           tabIndex={-1}
-          onLoadedMetadata={(event) => syncVideo(event.currentTarget, index, locateClip(progressRef.current))}
           style={{ opacity: active.index === index ? active.opacity : 0, objectPosition: clip.focus }}
         />
       ))}

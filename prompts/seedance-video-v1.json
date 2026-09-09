@@ -1,0 +1,94 @@
+{
+  "version": "seedance-video-v1",
+  "defaults": {
+    "duration": 5,
+    "ratio": "16:9",
+    "resolution": "720p",
+    "generate_audio": false,
+    "watermark": false,
+    "styleLock": "Luminous neoclassical oil painting, restrained natural motion, warm ivory sunlight, pale blue sky, olive green and antique gold palette. Preserve the exact painterly composition, character identity, costume, anatomy, object count and brushwork of the reference images. Human skin is smooth and softly painted, never scaly, cracked or dry. No text, captions, logos, watermark, cuts, morphing, extra hands, extra fingers or newly invented objects."
+  },
+  "shots": [
+    {
+      "id": "01-olive-breath",
+      "model": "seedance-2.0-mini",
+      "start": "shot-02.png",
+      "end": "shot-03.png",
+      "at": 0.038,
+      "until": 0.078,
+      "prompt": "Image 1 is the opening frame and image 2 is the exact final composition. A single ripe olive hangs from its branch in extreme macro. A faint breeze moves only the narrow leaves and the olive turns by a few degrees, catching warm sunlight. The camera performs one slow, perfectly stable macro push-in until the olive fills the frame exactly as in image 2. Preserve the single olive's oval shape, stem, colour and painterly surface. Continuous shot, no cut, no fall yet."
+    },
+    {
+      "id": "02-nuwa-catches-seed",
+      "model": "seedance-2.5",
+      "start": "shot-04.png",
+      "end": "shot-05.png",
+      "at": 0.14,
+      "until": 0.205,
+      "prompt": "Image 1 is the opening frame and image 2 is the exact final composition. Nüwa, the Chinese creator goddess with a woman's upper body and a pale jade serpentine lower body, gently opens her two anatomically correct cupped hands to reveal one grooved olive pit. Her hands remain side by side, touching at the little-finger edges without overlapping. Her profile and costume stay unchanged. The camera glides from the medium portrait into a close view of the pit resting in both palms, ending on image 2. Her sleeves and loose hair move softly in the breeze; the cracked luminous sky remains coherent. Continuous reverent shot, no cut."
+    },
+    {
+      "id": "03-five-verifiers",
+      "model": "seedance-2.0-mini",
+      "start": "shot-06.png",
+      "end": "shot-07.png",
+      "at": 0.28,
+      "until": 0.355,
+      "prompt": "Image 1 is the opening frame and image 2 is the exact final composition. Around the single olive pit, five verification paths awaken one after another: jade, cinnabar, amber, ivory and indigo. Each path travels outward to its matching olive leaf while Nüwa observes without moving abruptly. The camera makes a slow clockwise arc and then tilts upward as Nüwa raises the five-leaf branch toward the luminous fracture, ending on image 2. Keep exactly five coloured leaves and one pit; preserve Nüwa's identity, pale jade serpent body and bronze measuring compass. Continuous shot, no cut, calm purposeful motion."
+    },
+    {
+      "id": "04-plant-the-pit",
+      "model": "seedance-2.5",
+      "start": "shot-08.png",
+      "end": "shot-09.png",
+      "at": 0.42,
+      "until": 0.49,
+      "prompt": "Image 1 is the opening frame and image 2 is the exact final composition. Nüwa leans forward and lowers one olive pit into a shallow line of dark soil with one careful, anatomically natural hand movement. Her other hand supports her balance and never duplicates. The camera descends beside her hand into a precise ground-level macro, ending on the olive pit and fingertip exactly as in image 2. Loose soil shifts subtly under the pit; sleeve fabric and hair move gently. Preserve the neoclassical oil painting and the glowing repaired sky. Continuous shot, no cut."
+    },
+    {
+      "id": "05-first-root",
+      "model": "seedance-2.0-fast",
+      "start": "shot-09.png",
+      "end": "shot-10.png",
+      "at": 0.49,
+      "until": 0.555,
+      "prompt": "Image 1 is the opening frame and image 2 is the exact final composition. The camera passes smoothly beneath the soil as the single olive pit settles. Its seam opens naturally; one green shoot rises and a white primary root grows downward. Four finer verification roots in jade, cinnabar, amber, ivory and indigo branch outward through the earth with botanical realism, never like wires. End on the complete underground cutaway in image 2. Preserve painterly earth, stable lighting and exact seed anatomy. Continuous shot, no cut."
+    },
+    {
+      "id": "06-roots-find-evidence",
+      "model": "seedance-2.0-fast",
+      "start": "shot-10.png",
+      "end": "shot-11.png",
+      "at": 0.555,
+      "until": 0.625,
+      "prompt": "Image 1 is the opening frame and image 2 is the exact final composition. Follow the growing root system through dark soil in one fluid upward crane. The five coloured verification roots explore different paths, reconnecting into a strong natural root crown as the shoot breaks the surface and becomes a young olive sapling. The camera emerges into warm daylight and reveals Nüwa beside it, ending exactly on image 2. Growth is continuous, organic and controlled, with no time-lapse flicker, no sudden morph and no extra plants."
+    },
+    {
+      "id": "07-growth-within-reach",
+      "model": "seedance-2.0-fast",
+      "start": "shot-11.png",
+      "end": "shot-12.png",
+      "at": 0.625,
+      "until": 0.775,
+      "prompt": "Image 1 is the opening frame and image 2 is the exact final composition. The young olive sapling grows steadily while its five coloured verification roots expand at the same pace. Branches lengthen, bark matures and narrow olive leaves unfold in controlled botanical growth. Nüwa remains calm and physically consistent beside the tree, one hand lightly following the trunk. The camera performs a slow rising pullback to reveal both crown and roots, ending on image 2. Continuous shot, no cut, no explosive growth, no duplicated branches or body parts."
+    },
+    {
+      "id": "08-leaves-mend-sky",
+      "model": "seedance-2.5",
+      "start": "shot-12.png",
+      "end": "shot-13.png",
+      "at": 0.775,
+      "until": 0.905,
+      "prompt": "Image 1 is the opening frame and image 2 is the exact final composition. A precise branch sends five large olive leaves upward, coloured jade, cinnabar, amber, ivory and indigo. They glide like pieces of stained light into the fractures in the sky, aligning edge to edge and sealing the luminous wound without an explosion. Nüwa raises one arm to guide them while remaining small and consistent below. The camera tilts upward and passes close beside the leaves, ending on the leaf-and-sky macro of image 2. Continuous majestic shot, no cut, no fantasy particles, no extra leaves."
+    },
+    {
+      "id": "09-peace-is-carried",
+      "model": "seedance-2.0-mini",
+      "start": "shot-13.png",
+      "end": "shot-14.png",
+      "at": 0.905,
+      "until": 0.97,
+      "prompt": "Image 1 is the opening frame and image 2 is the exact final composition. The camera withdraws from the repaired five-coloured olive leaves, travelling smoothly through the crown of a mature olive tree. Narrow leaves shimmer in a mild breeze. The pullback reveals Nüwa beneath the ancient tree and one white dove lifting a small olive branch into the clear repaired sky, ending exactly on image 2. Preserve the single dove, Nüwa's pale jade serpent body, the landscape and the warm neoclassical oil-painting style. Continuous peaceful shot, no cut."
+    }
+  ]
+}

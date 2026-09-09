@@ -4,7 +4,7 @@
 
 **Abundant verification tokens for powerful AI.**
 
-[Live site](https://feiye0310.github.io/Fantasy-AI-safety/) · [Research questions](https://github.com/FeiYe0310/Fantasy-AI-safety/issues?q=is%3Aissue+label%3Aresearch) · [Join us](https://github.com/FeiYe0310/Fantasy-AI-safety/issues/new?template=join-us.yml)
+[Live site](https://fantasy-ai-safety.feiye0310.chatgpt.site/) · [Research questions](https://github.com/FeiYe0310/Fantasy-AI-safety/issues?q=is%3Aissue+label%3Aresearch) · [Join us](https://github.com/FeiYe0310/Fantasy-AI-safety/issues/new?template=join-us.yml)
 
 </div>
 
@@ -14,20 +14,17 @@ Powerful AI systems receive abundant compute to generate an answer, but far less
 
 Fantasy AI Safety works toward systems where every consequential action can carry enough independent checks, counterarguments, causal evidence, and recovery steps before it reaches the world. We use **verification tokens** as a research framing for the compute and evidence budget devoted to critique, monitoring, interpretation, and correction—not as a claim about a specific API token type.
 
-## The guardians
+## The guardian
 
-The site tells this thesis through two mythic figures:
+The site tells this thesis through Nüwa, the Chinese creator and mender of the broken sky. She represents locating failure, repairing structure, and preserving the ability to recover when no boundary can anticipate everything.
 
-- **Soteria · The Boundary** — the Greek personification of safety and deliverance. She represents prevention, constraint, and verification before harm.
-- **Nüwa · The Repair** — the Chinese creator and mender of the broken sky. She represents locating failure, repairing structure, and recovering when no boundary can anticipate everything.
+The olive carries the argument through every chapter: one fruit becomes a pit, a verified root system, a monitored tree, five coloured leaves that mend the sky, and finally a branch carried by a white dove.
 
-Their fusion carries the project's central claim:
+The story carries the project's central claim:
 
-> Constraint without repair becomes brittle.
->
 > Creation without verification becomes dangerous.
 >
-> Safety needs both.
+> A repair is trustworthy only when evidence can grow through it.
 
 ## Research directions
 
@@ -47,13 +44,20 @@ Mechanistic interpretability, causal localization, anomalous representations, go
 
 The homepage is a continuous scroll-driven story built around one living object: an olive.
 
-1. Soteria holds the boundary while Nüwa locates and repairs the broken sky.
-2. Their fingertips meet, closing the loop between prevention and recovery.
-3. The repaired sky makes growth possible: one olive seed lands and takes root in a fixed-camera, scroll-scrubbed photographic growth sequence.
-4. Verification becomes the root system, monitoring the trunk, and mechanistic repair the branches.
-5. A mature olive tree offers a leaf to a white dove, carrying accountable power toward peace.
+1. The final olive remains beneath a sky fractured by unchecked action.
+2. Nüwa catches its pit and pauses before repairing the visible wound.
+3. Five independent colours test the pit, then become verification roots beneath the soil.
+4. The olive grows only as fast as its evidence and safeguards can grow with it.
+5. Five olive leaves enter the fractures and mend the sky.
+6. A mature olive tree offers a branch to a white dove, carrying accountable power toward peace.
 
-Ten botanical keyframes are continuously blended on one canvas so the seed, roots, sprout, sapling, tree, fruit, and dove read as one evolving subject rather than a slideshow. The experience also includes a readable `prefers-reduced-motion` version and responsive layouts for desktop and mobile.
+Fourteen 1672×941 oil-painting keyframes and nine 1280×720 H.264 motion bridges share one scroll-controlled timeline. The still paintings remain visible at every seam while the videos provide real camera movement and organic growth between them. The experience also includes a readable `prefers-reduced-motion` version and responsive layouts for desktop and mobile.
+
+## Video pipeline
+
+The reproducible English prompt pack is in [`prompts/seedance-video-v1.json`](prompts/seedance-video-v1.json). It records the model, source and destination frames, timeline range, global style lock, and shot-specific direction for all nine clips.
+
+The local generation utility is [`scripts/seedance-generate.mjs`](scripts/seedance-generate.mjs). It uploads and caches reference images, creates one task per selected shot, polls without duplicating requests, downloads successful videos, and enforces a 50 CNY estimated-cost ceiling. Copy `.env.example` to the ignored `.env.local`, add a restricted API token, and run `pnpm video:generate -- --shot=01-olive-breath` (or `--all`). Credentials are never shipped to the browser.
 
 ## Development
 
@@ -71,7 +75,7 @@ pnpm build
 pnpm preview
 ```
 
-The Vite base path is configured for GitHub Pages at `/Fantasy-AI-safety/`. Pushes to `main` deploy through `.github/workflows/deploy.yml`.
+The Vite build uses a relative base path so the same `dist` works on the public Sites deployment and GitHub Pages. Generated videos are fast-start MP4 files under `site-public/olive-oil-story-v1/video/`.
 
 ## Contributing
 

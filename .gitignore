@@ -5,6 +5,7 @@
 # Local dependencies and build output
 node_modules/
 dist/
+.env.local
 
 # Local captures, extracted debug data, and Codex preview logs
 .capture/

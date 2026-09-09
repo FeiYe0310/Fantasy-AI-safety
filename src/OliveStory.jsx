@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import useScrollProgress from './useScrollProgress';
 import OliveSequenceCanvas from './OliveSequenceCanvas';
+import OliveVideoLayer from './OliveVideoLayer';
 import './olive-story.css';
 
 const clamp = (value) => Math.min(1, Math.max(0, value));
@@ -108,6 +109,7 @@ export default function OliveStory() {
       <div className="olive-stage">
         <div className="olive-world" aria-hidden="true">
           <OliveSequenceCanvas progress={progress} opacity={1} stress={stress} />
+          <OliveVideoLayer progress={progress} reduced={reduced} stress={stress} />
           <div className="olive-grade" />
           <div className="olive-vignette" />
         </div>

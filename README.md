@@ -55,7 +55,7 @@ Fourteen 1672×941 oil-painting keyframes and nine 1280×720 H.264 motion bridge
 
 ## Video pipeline
 
-The reproducible English prompt pack is in [`prompts/seedance-video-v1.json`](prompts/seedance-video-v1.json). It records the model, source and destination frames, timeline range, global style lock, and shot-specific direction for all nine clips.
+The original reproducible English prompt pack is in [`prompts/seedance-video-v1.json`](prompts/seedance-video-v1.json). The object-orbit continuation is recorded in [`prompts/seedance-video-v2-orbit.json`](prompts/seedance-video-v2-orbit.json), including the tree-growth arc, leaf-plucking orbit, and sky-mending follow shot.
 
 The local generation utility is [`scripts/seedance-generate.mjs`](scripts/seedance-generate.mjs). It uploads and caches reference images, creates one task per selected shot, polls without duplicating requests, downloads successful videos, and enforces a 50 CNY estimated-cost ceiling. Copy `.env.example` to the ignored `.env.local`, add a restricted API token, and run `pnpm video:generate -- --shot=01-olive-breath` (or `--all`). Credentials are never shipped to the browser.
 

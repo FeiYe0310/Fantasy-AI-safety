@@ -1,0 +1,42 @@
+{
+  "version": "seedance-video-v2-orbit",
+  "sourceDir": "site-public/olive-oil-story-v1",
+  "workDir": "artwork-source/seedance-video-v2",
+  "defaults": {
+    "duration": 5,
+    "ratio": "16:9",
+    "resolution": "720p",
+    "generate_audio": false,
+    "watermark": false,
+    "styleLock": "Luminous neoclassical oil painting in bright warm daylight. Preserve the exact Nüwa identity, hairstyle, pale jade hanfu, red sash, bronze measuring compass, smooth pale jade serpentine lower body, soft human skin, olive-tree anatomy, object count, colour placement and restrained brushwork of the reference images. The camera movement must be spatially real: fixed subject anchor, changing perspective, near branches crossing faster than Nüwa, and distant mountains moving slower. No zoom-only motion, no rotating the subject instead of the camera, no morphing, no cuts, no extra hands, extra fingers, dry skin, scales, text, logos or watermark."
+  },
+  "shots": [
+    {
+      "id": "10-growth-orbit",
+      "model": "seedance-2.0-fast",
+      "start": "shot-11.jpg",
+      "end": "orbit-12-prepluck.jpg",
+      "at": 0.625,
+      "until": 0.75,
+      "prompt": "Image 1 is the exact opening frame and Image 2 is the exact final frame. The young olive tree grows continuously into the mature tree of Image 2 while exactly one narrow five-colour olive leaf develops on the reachable branch. Nüwa remains physically consistent beside it and slowly raises one hand toward that leaf. During the entire growth, the camera performs one smooth clockwise 70-degree arc around the tree at eye level, keeping the trunk as the fixed orbit centre. This is a genuine dolly-orbit, not a push-in: foreground leaves sweep laterally across the lens, the trunk reveals a new side, Nüwa changes from a side view to a three-quarter view because the camera moves, and the distant mountains shift more slowly. End precisely before her fingers touch the coloured leaf. Continuous controlled botanical growth, no explosive time lapse, no duplicated branches, no subject rotation."
+    },
+    {
+      "id": "11-pluck-orbit",
+      "model": "seedance-2.5",
+      "start": "orbit-12-prepluck.jpg",
+      "end": "orbit-13-plucked.jpg",
+      "at": 0.75,
+      "until": 0.86,
+      "prompt": "Image 1 is the exact opening frame and Image 2 is the exact final frame. Centre the entire shot on the same single five-colour olive leaf. Nüwa's anatomically correct thumb and index finger pinch only its short stem, detach it once with a small natural pull, and lift it toward the luminous sky fracture. At the same time the camera executes one continuous clockwise 55-degree orbit around the leaf and her fingertips, finishing at the rear-side angle of Image 2. The leaf is the fixed visual anchor while the tree trunk crosses from left to right, a near branch briefly passes the lens, Nüwa's profile reveals its far side, and the mountains move with slower parallax. The leaf keeps exactly the same shape, size and five colour zones throughout. No zoom-only move, no leaf teleportation, no hand morph, no extra leaf, no subject spinning."
+    },
+    {
+      "id": "12-mend-orbit",
+      "model": "seedance-2.0-fast",
+      "start": "orbit-14-raised.jpg",
+      "end": "orbit-15-mended.jpg",
+      "at": 0.88,
+      "until": 0.95,
+      "prompt": "Image 1 is the exact opening frame and Image 2 is the exact final frame. Follow the same single five-colour olive leaf and Nüwa's raised hand. She guides the leaf edge-first into the luminous sky fracture, presses it into place, then releases it so her fingertips withdraw a few centimetres below. The crack closes into calm blue sky immediately behind the embedded leaf while the unrepaired line still glows ahead. The camera performs a smooth 40-degree clockwise orbit combined with a gentle upward crane around the leaf, revealing the leaf edge, the contact point inside the crack, Nüwa's profile below and a real change in the distant landscape. Keep the leaf and hand as the spatial centre; genuine occlusion and parallax, not zooming or rotating the painting. End with the leaf physically touching and filling the crack exactly as in Image 2. No floating leaf, no explosion, no fantasy particles, no morphing hand, no cut."
+    }
+  ]
+}

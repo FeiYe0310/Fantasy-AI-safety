@@ -20,12 +20,15 @@ const SHOTS = [
   { file: 'transitions/05-first-root-end.jpg', at: .551, focus: [.53, .52] },
   { file: 'transitions/06-roots-find-evidence-start.jpg', at: .559, focus: [.53, .52] },
   { file: 'transitions/06-roots-find-evidence-end.jpg', at: .621, focus: [.61, .55] },
-  { file: 'transitions/07-growth-within-reach-start.jpg', at: .629, focus: [.61, .55] },
-  { file: 'transitions/07-growth-within-reach-end.jpg', at: .771, focus: [.7, .5] },
-  { file: 'transitions/08-leaves-mend-sky-start.jpg', at: .779, focus: [.7, .5] },
-  { file: 'transitions/08-leaves-mend-sky-end.jpg', at: .901, focus: [.54, .5] },
-  { file: 'transitions/09-peace-is-carried-start.jpg', at: .909, focus: [.54, .5] },
-  { file: 'transitions/09-peace-is-carried-end.jpg', at: .97, focus: [.68, .5] },
+  { file: 'transitions/10-growth-orbit-start.jpg', at: .629, focus: [.59, .53] },
+  { file: 'transitions/10-growth-orbit-end.jpg', at: .744, focus: [.62, .5] },
+  { file: 'transitions/11-pluck-orbit-start.jpg', at: .752, focus: [.62, .5] },
+  { file: 'transitions/11-pluck-orbit-end.jpg', at: .852, focus: [.58, .48] },
+  { file: 'orbit-14-raised.jpg', at: .872, focus: [.55, .46] },
+  { file: 'transitions/12-mend-orbit-start.jpg', at: .88, focus: [.55, .46] },
+  { file: 'transitions/12-mend-orbit-end.jpg', at: .946, focus: [.56, .45] },
+  { file: 'orbit-15-mended.jpg', at: .958, focus: [.56, .44] },
+  { file: 'shot-14.jpg', at: .99, focus: [.68, .5] },
 ];
 
 const drawCover = (context, image, width, height, scale, focus) => {

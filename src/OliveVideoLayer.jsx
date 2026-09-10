@@ -15,9 +15,9 @@ const CLIPS = [
   { file: '04-plant-the-pit.mp4', from: .42, to: .486, poster: 'transitions/04-plant-the-pit-start.jpg', focus: '68% 54%' },
   { file: '05-first-root.mp4', from: .494, to: .551, poster: 'transitions/05-first-root-start.jpg', focus: '55% 53%' },
   { file: '06-roots-find-evidence.mp4', from: .559, to: .621, poster: 'transitions/06-roots-find-evidence-start.jpg', focus: '53% 52%' },
-  { file: '07-growth-within-reach.mp4', from: .629, to: .771, poster: 'transitions/07-growth-within-reach-start.jpg', focus: '61% 55%' },
-  { file: '08-leaves-mend-sky.mp4', from: .779, to: .901, poster: 'transitions/08-leaves-mend-sky-start.jpg', focus: '70% 50%' },
-  { file: '09-peace-is-carried.mp4', from: .909, to: .97, poster: 'transitions/09-peace-is-carried-start.jpg', focus: '54% 50%' },
+  { file: '10-growth-orbit.mp4', from: .629, to: .744, poster: 'transitions/10-growth-orbit-start.jpg', focus: '59% 53%' },
+  { file: '11-pluck-orbit.mp4', from: .752, to: .852, poster: 'transitions/11-pluck-orbit-start.jpg', focus: '60% 49%' },
+  { file: '12-mend-orbit.mp4', from: .88, to: .946, poster: 'transitions/12-mend-orbit-start.jpg', focus: '55% 46%' },
 ];
 
 const locateClip = (progress) => {

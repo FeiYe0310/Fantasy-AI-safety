@@ -4,11 +4,8 @@ import process from 'node:process';
 
 const root = process.cwd();
 const envPath = path.join(root, '.env.local');
-const sourceDir = path.join(root, 'artwork-source', 'olive-story-v5-classical-glaze');
-const workDir = path.join(root, 'artwork-source', 'seedance-video-v1');
-const outputDir = path.join(workDir, 'output');
-const cachePath = path.join(workDir, 'cache.json');
-const manifestPath = path.join(root, 'prompts', 'seedance-video-v1.json');
+const optionValue = (name) => process.argv.find((argument) => argument.startsWith(`${name}=`))?.slice(name.length + 1);
+const manifestPath = path.resolve(root, optionValue('--manifest') || path.join('prompts', 'seedance-video-v1.json'));
 
 const parseEnv = (text) => Object.fromEntries(text.split(/\r?\n/).filter(Boolean).filter((line) => !line.startsWith('#')).map((line) => {
   const split = line.indexOf('=');
@@ -21,6 +18,10 @@ const apiKey = env.HAOMAO_API_KEY;
 if (!apiBase || !apiKey) throw new Error('Missing HAOMAO_API_BASE or HAOMAO_API_KEY in .env.local');
 
 const spec = JSON.parse(await readFile(manifestPath, 'utf8'));
+const sourceDir = path.resolve(root, spec.sourceDir || path.join('artwork-source', 'olive-story-v5-classical-glaze'));
+const workDir = path.resolve(root, spec.workDir || path.join('artwork-source', 'seedance-video-v1'));
+const outputDir = path.join(workDir, 'output');
+const cachePath = path.join(workDir, 'cache.json');
 const selected = process.argv.includes('--all')
   ? spec.shots
   : spec.shots.filter((shot) => process.argv.includes(`--shot=${shot.id}`));

@@ -85,11 +85,25 @@ const chapters = [
   },
 ];
 
+// These windows follow the visual edit rather than the evenly spaced chapter
+// labels. Copy now arrives during the corresponding camera move and transition.
+const visualWindows = [
+  { from: 0, to: .078 },
+  { from: .115, to: .205 },
+  { from: .245, to: .355 },
+  { from: .385, to: .494 },
+  { from: .486, to: .629 },
+  { from: .621, to: .779 },
+  { from: .771, to: .909 },
+  { from: .901, to: 1 },
+];
+
 const phaseOpacity = (p, index) => {
-  const centers = chapters.map(chapter => chapter.at);
-  const start = index === 0 ? -.025 : (centers[index - 1] + centers[index]) / 2;
-  const end = index === chapters.length - 1 ? 1.035 : (centers[index] + centers[index + 1]) / 2;
-  return hold(p, start, centers[index] - .012, centers[index] + .035, end);
+  const start = visualWindows[index].from;
+  const end = index === chapters.length - 1 ? 1.02 : visualWindows[index + 1].from;
+  const incoming = index === 0 ? 1 : enter(p, start, start + .018);
+  const outgoing = index === chapters.length - 1 ? 1 : 1 - enter(p, end - .018, end);
+  return incoming * outgoing;
 };
 
 export default function OliveStory() {
@@ -116,22 +130,23 @@ export default function OliveStory() {
 
         <div className="olive-copy">
           {chapters.map((chapter, index) => {
-            const previous = index === 0 ? -.02 : (chapters[index - 1].at + chapter.at) / 2;
-            const next = index === chapters.length - 1 ? 1.02 : (chapter.at + chapters[index + 1].at) / 2;
-            const local = clamp((progress - previous) / (next - previous));
+            const visualWindow = visualWindows[index];
+            const visualLocal = clamp((progress - visualWindow.from) / (visualWindow.to - visualWindow.from));
             const opacity = reduced ? 1 : phaseOpacity(progress, index);
+            const headingReveal = reduced ? 1 : enter(visualLocal, 0, .14);
+            const headingStyle = reduced ? undefined : { opacity: headingReveal, transform: `translateY(${(1 - headingReveal) * 12}px)` };
             return (
               <article key={chapter.id} id={reduced ? chapter.id : undefined} className={`olive-scene olive-scene--${index}`} aria-hidden={!reduced && active !== index} inert={!reduced && active !== index} style={{ opacity, '--chapter-drift': reduced ? '0vh' : `${(progress - chapter.at) * -18}vh` }}>
-                <p className="eyebrow">{chapter.kicker}</p>
-                {index === 0 ? <h1>{chapter.title.map(line => <span key={line}>{line}</span>)}</h1> : <h2>{chapter.title.map(line => <span key={line}>{line}</span>)}</h2>}
+                <p className="eyebrow" style={headingStyle}>{chapter.kicker}</p>
+                {index === 0 ? <h1 style={headingStyle}>{chapter.title.map(line => <span key={line}>{line}</span>)}</h1> : <h2 style={headingStyle}>{chapter.title.map(line => <span key={line}>{line}</span>)}</h2>}
                 <div className="olive-narrative">
                   {chapter.paragraphs.map((paragraph, paragraphIndex) => {
-                    const reveal = reduced ? 1 : enter(local, .08 + paragraphIndex * .16, .25 + paragraphIndex * .16);
+                    const reveal = reduced ? 1 : enter(visualLocal, .04 + paragraphIndex * .07, .18 + paragraphIndex * .07);
                     return <p key={paragraph} style={{ opacity: reveal, transform: reduced ? undefined : `translateY(${(1 - reveal) * 14}px)` }}>{paragraph}</p>;
                   })}
                 </div>
-                <p className="olive-note" style={{ opacity: reduced ? 1 : enter(local, .58, .76) }}>{chapter.note}</p>
-                {chapter.actions && <div className="olive-actions" style={{ opacity: reduced ? 1 : enter(local, .7, .88) }}><a className="olive-primary" href="https://github.com/FeiYe0310/Fantasy-AI-safety/issues/new?template=join-us.yml" target="_blank" rel="noreferrer">Join the work <span>↗</span></a><a href="https://github.com/FeiYe0310/Fantasy-AI-safety" target="_blank" rel="noreferrer">Explore the research ↗</a></div>}
+                <p className="olive-note" style={{ opacity: reduced ? 1 : enter(visualLocal, .24, .4) }}>{chapter.note}</p>
+                {chapter.actions && <div className="olive-actions" style={{ opacity: reduced ? 1 : enter(visualLocal, .4, .62) }}><a className="olive-primary" href="https://github.com/FeiYe0310/Fantasy-AI-safety/issues/new?template=join-us.yml" target="_blank" rel="noreferrer">Join the work <span>↗</span></a><a href="https://github.com/FeiYe0310/Fantasy-AI-safety" target="_blank" rel="noreferrer">Explore the research ↗</a></div>}
               </article>
             );
           })}

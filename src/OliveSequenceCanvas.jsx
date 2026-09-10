@@ -8,19 +8,24 @@ const ease = (value) => { const t = clamp(value); return t * t * (3 - 2 * t); };
 // establishing paintings, so the object—not the chapter change—drives the cut.
 const SHOTS = [
   { file: 'shot-01.jpg', at: 0, focus: [.64, .5] },
-  { file: 'shot-02.jpg', at: .038, focus: [.68, .48] },
-  { file: 'shot-03.jpg', at: .078, focus: [.53, .5] },
-  { file: 'shot-04.jpg', at: .14, focus: [.68, .5] },
-  { file: 'shot-05.jpg', at: .205, focus: [.55, .5] },
-  { file: 'shot-06.jpg', at: .28, focus: [.67, .5] },
-  { file: 'shot-07.jpg', at: .355, focus: [.68, .48] },
-  { file: 'shot-08.jpg', at: .42, focus: [.68, .54] },
-  { file: 'shot-09.jpg', at: .49, focus: [.55, .53] },
-  { file: 'shot-10.jpg', at: .555, focus: [.53, .52] },
-  { file: 'shot-11.jpg', at: .625, focus: [.61, .55] },
-  { file: 'shot-12.jpg', at: .775, focus: [.7, .5] },
-  { file: 'shot-13.jpg', at: .905, focus: [.54, .5] },
-  { file: 'shot-14.jpg', at: .97, focus: [.68, .5] },
+  { file: 'transitions/01-olive-breath-start.jpg', at: .038, focus: [.68, .48] },
+  { file: 'transitions/01-olive-breath-end.jpg', at: .078, focus: [.53, .5] },
+  { file: 'transitions/02-nuwa-catches-seed-start.jpg', at: .14, focus: [.68, .5] },
+  { file: 'transitions/02-nuwa-catches-seed-end.jpg', at: .205, focus: [.55, .5] },
+  { file: 'transitions/03-five-verifiers-start.jpg', at: .28, focus: [.67, .5] },
+  { file: 'transitions/03-five-verifiers-end.jpg', at: .355, focus: [.68, .48] },
+  { file: 'transitions/04-plant-the-pit-start.jpg', at: .42, focus: [.68, .54] },
+  { file: 'transitions/04-plant-the-pit-end.jpg', at: .486, focus: [.55, .53] },
+  { file: 'transitions/05-first-root-start.jpg', at: .494, focus: [.55, .53] },
+  { file: 'transitions/05-first-root-end.jpg', at: .551, focus: [.53, .52] },
+  { file: 'transitions/06-roots-find-evidence-start.jpg', at: .559, focus: [.53, .52] },
+  { file: 'transitions/06-roots-find-evidence-end.jpg', at: .621, focus: [.61, .55] },
+  { file: 'transitions/07-growth-within-reach-start.jpg', at: .629, focus: [.61, .55] },
+  { file: 'transitions/07-growth-within-reach-end.jpg', at: .771, focus: [.7, .5] },
+  { file: 'transitions/08-leaves-mend-sky-start.jpg', at: .779, focus: [.7, .5] },
+  { file: 'transitions/08-leaves-mend-sky-end.jpg', at: .901, focus: [.54, .5] },
+  { file: 'transitions/09-peace-is-carried-start.jpg', at: .909, focus: [.54, .5] },
+  { file: 'transitions/09-peace-is-carried-end.jpg', at: .97, focus: [.68, .5] },
 ];
 
 const drawCover = (context, image, width, height, scale, focus) => {
@@ -38,8 +43,9 @@ const locateShot = (progress) => {
   const firstIndex = nextIndex - 1;
   const span = SHOTS[nextIndex].at - SHOTS[firstIndex].at;
   const local = clamp((progress - SHOTS[firstIndex].at) / span);
-  // Hold each oil painting briefly, then dissolve through its moving brushwork.
-  const mix = ease((local - .2) / .62);
+  // Hold the exact boundary frame, then dissolve across the shared brushwork.
+  // Closely spaced stops create a short, deliberate bridge between adjacent clips.
+  const mix = ease((local - .12) / .76);
   return { firstIndex, secondIndex: nextIndex, local, mix };
 };
 

@@ -9,15 +9,15 @@ const smoother = (value) => {
 // Every moving shot starts and ends on one of the paintings used by the canvas
 // below it. Fading through those shared frames makes each cut feel continuous.
 const CLIPS = [
-  { file: '01-olive-breath.mp4', from: .038, to: .078, poster: 'shot-02.jpg', focus: '68% 48%' },
-  { file: '02-nuwa-catches-seed.mp4', from: .14, to: .205, poster: 'shot-04.jpg', focus: '68% 50%' },
-  { file: '03-five-verifiers.mp4', from: .28, to: .355, poster: 'shot-06.jpg', focus: '67% 50%' },
-  { file: '04-plant-the-pit.mp4', from: .42, to: .49, poster: 'shot-08.jpg', focus: '68% 54%' },
-  { file: '05-first-root.mp4', from: .49, to: .555, poster: 'shot-09.jpg', focus: '55% 53%' },
-  { file: '06-roots-find-evidence.mp4', from: .555, to: .625, poster: 'shot-10.jpg', focus: '53% 52%' },
-  { file: '07-growth-within-reach.mp4', from: .625, to: .775, poster: 'shot-11.jpg', focus: '61% 55%' },
-  { file: '08-leaves-mend-sky.mp4', from: .775, to: .905, poster: 'shot-12.jpg', focus: '70% 50%' },
-  { file: '09-peace-is-carried.mp4', from: .905, to: .97, poster: 'shot-13.jpg', focus: '54% 50%' },
+  { file: '01-olive-breath.mp4', from: .038, to: .078, poster: 'transitions/01-olive-breath-start.jpg', focus: '68% 48%' },
+  { file: '02-nuwa-catches-seed.mp4', from: .14, to: .205, poster: 'transitions/02-nuwa-catches-seed-start.jpg', focus: '68% 50%' },
+  { file: '03-five-verifiers.mp4', from: .28, to: .355, poster: 'transitions/03-five-verifiers-start.jpg', focus: '67% 50%' },
+  { file: '04-plant-the-pit.mp4', from: .42, to: .486, poster: 'transitions/04-plant-the-pit-start.jpg', focus: '68% 54%' },
+  { file: '05-first-root.mp4', from: .494, to: .551, poster: 'transitions/05-first-root-start.jpg', focus: '55% 53%' },
+  { file: '06-roots-find-evidence.mp4', from: .559, to: .621, poster: 'transitions/06-roots-find-evidence-start.jpg', focus: '53% 52%' },
+  { file: '07-growth-within-reach.mp4', from: .629, to: .771, poster: 'transitions/07-growth-within-reach-start.jpg', focus: '61% 55%' },
+  { file: '08-leaves-mend-sky.mp4', from: .779, to: .901, poster: 'transitions/08-leaves-mend-sky-start.jpg', focus: '70% 50%' },
+  { file: '09-peace-is-carried.mp4', from: .909, to: .97, poster: 'transitions/09-peace-is-carried-start.jpg', focus: '54% 50%' },
 ];
 
 const locateClip = (progress) => {

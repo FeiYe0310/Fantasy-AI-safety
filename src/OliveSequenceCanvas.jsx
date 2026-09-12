@@ -1,41 +1,42 @@
 import React, { useEffect, useRef } from 'react';
 
-const VIRTUAL_FRAME_COUNT = 400;
 const clamp = (value) => Math.min(1, Math.max(0, value));
-const smoother = (value) => {
+const smooth = (value) => {
   const t = clamp(value);
-  return t * t * t * (t * (t * 6 - 15) + 10);
+  return t * t * (3 - 2 * t);
 };
+const range = (value, start, end) => smooth((value - start) / (end - start));
 
-const SHOTS = [
-  { file: '01-heaven-breaks.jpg', at: 0, focus: [.66, .5], mobileFocus: .72, zoom: [1.005, 1.045] },
-  { file: '02-olive-falls.jpg', at: .1, focus: [.66, .5], mobileFocus: .7, zoom: [1.01, 1.055] },
-  { file: '03-nuwa-catches.jpg', at: .2, focus: [.34, .49], mobileFocus: .36, zoom: [1.015, 1.06] },
-  { file: '04-plant-the-pit.jpg', at: .3, focus: [.65, .54], mobileFocus: .68, zoom: [1.015, 1.06] },
-  { file: '05-roots-of-evidence.jpg', at: .41, focus: [.4, .54], mobileFocus: .42, zoom: [1.01, 1.055] },
-  { file: '06-the-tree-grows.jpg', at: .52, focus: [.67, .51], mobileFocus: .69, zoom: [1.01, 1.05] },
-  { file: '07-the-leaf-is-chosen.jpg', at: .63, focus: [.39, .48], mobileFocus: .42, zoom: [1.015, 1.06] },
-  { file: '08-evidence-to-carry.jpg', at: .73, focus: [.67, .47], mobileFocus: .69, zoom: [1.01, 1.055] },
-  { file: '09-mend-the-sky.jpg', at: .83, focus: [.67, .46], mobileFocus: .7, zoom: [1.005, 1.05] },
-  { file: '10-peace-verified.jpg', at: .94, focus: [.38, .47], mobileFocus: .4, zoom: [1.01, 1.045] },
+const STILLS = [
+  { file: '01-fall.jpg', focus: [.68, .49], mobile: [.66, .46] },
+  { file: '02-underground.jpg', focus: [.67, .53], mobile: [.69, .5] },
+  { file: '03-germinate.jpg', focus: [.68, .52], mobile: [.7, .5] },
+  { file: '04-trunk.jpg', focus: [.65, .5], mobile: [.68, .5] },
+  { file: '05-branch.jpg', focus: [.66, .5], mobile: [.69, .5] },
+  { file: '06-fruit.jpg', focus: [.7, .48], mobile: [.7, .48] },
 ];
 
-const drawCover = (context, image, width, height, scale, focus, mobileFocus) => {
-  const ratio = Math.max(width / image.naturalWidth, height / image.naturalHeight) * scale;
-  const drawWidth = image.naturalWidth * ratio;
-  const drawHeight = image.naturalHeight * ratio;
-  const focusX = width < 760 ? mobileFocus : focus[0];
-  context.drawImage(image, (width - drawWidth) * focusX, (height - drawHeight) * focus[1], drawWidth, drawHeight);
+const drawCover = (context, media, width, height, scale = 1, focus = [.5, .5]) => {
+  const mediaWidth = media.videoWidth || media.naturalWidth;
+  const mediaHeight = media.videoHeight || media.naturalHeight;
+  if (!mediaWidth || !mediaHeight) return;
+  const ratio = Math.max(width / mediaWidth, height / mediaHeight) * scale;
+  const drawWidth = mediaWidth * ratio;
+  const drawHeight = mediaHeight * ratio;
+  context.drawImage(media, (width - drawWidth) * focus[0], (height - drawHeight) * focus[1], drawWidth, drawHeight);
 };
 
-const locateShot = (progress) => {
-  const nextIndex = SHOTS.findIndex((shot) => shot.at > progress);
-  if (nextIndex === -1) return { firstIndex: SHOTS.length - 1, secondIndex: SHOTS.length - 1, local: 1, mix: 0 };
-  if (nextIndex === 0) return { firstIndex: 0, secondIndex: 0, local: 0, mix: 0 };
-  const firstIndex = nextIndex - 1;
-  const span = SHOTS[nextIndex].at - SHOTS[firstIndex].at;
-  const local = clamp((progress - SHOTS[firstIndex].at) / span);
-  return { firstIndex, secondIndex: nextIndex, local, mix: smoother((local - .58) / .34) };
+const paintStill = (context, image, width, height, scale, focus, alpha = 1, rotation = 0) => {
+  if (!image?.complete || !image.naturalWidth || alpha <= 0) return;
+  context.save();
+  context.globalAlpha = alpha;
+  if (rotation) {
+    context.translate(width / 2, height / 2);
+    context.rotate(rotation);
+    context.translate(-width / 2, -height / 2);
+  }
+  drawCover(context, image, width, height, scale, focus);
+  context.restore();
 };
 
 export default function OliveSequenceCanvas({ progress = 0 }) {
@@ -45,34 +46,107 @@ export default function OliveSequenceCanvas({ progress = 0 }) {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const context = canvas?.getContext('2d', { alpha: false });
+    const context = canvas?.getContext('2d', { alpha: false, desynchronized: true });
     if (!canvas || !context) return undefined;
 
-    const base = import.meta.env.BASE_URL;
+    const base = `${import.meta.env.BASE_URL}olive-core-v26/`;
     let dirty = true;
-    const frames = SHOTS.map((shot, index) => {
+    const stills = STILLS.map((shot, index) => {
       const image = new Image();
       image.decoding = 'async';
       image.fetchPriority = index < 2 ? 'high' : 'auto';
-      image.src = `${base}olive-oil-story-v25/${shot.file}`;
+      image.src = `${base}${shot.file}`;
       image.onload = () => { dirty = true; };
       return image;
     });
 
+    const germination = document.createElement('video');
+    germination.src = `${base}02-germination.mp4`;
+    germination.preload = 'auto';
+    germination.muted = true;
+    germination.playsInline = true;
+    germination.load();
+    germination.addEventListener('loadeddata', () => { dirty = true; });
+    germination.addEventListener('seeked', () => { dirty = true; });
+
     let raf = 0;
     let current = progressRef.current;
-    let lastVirtualFrame = -1;
+    let lastProgress = -1;
     let lastWidth = 0;
     let lastHeight = 0;
+
+    const draw = (p, width, height) => {
+      const mobile = width < 760;
+      const focus = (index) => mobile ? STILLS[index].mobile : STILLS[index].focus;
+
+      context.fillStyle = '#dceaf0';
+      context.fillRect(0, 0, width, height);
+
+      if (p < .18) {
+        const local = range(p, 0, .18);
+        paintStill(context, stills[0], width, height, 1.01 + local * .19, [focus(0)[0] - local * .055, focus(0)[1] + local * .045]);
+        return;
+      }
+
+      if (p < .50) {
+        const local = clamp((p - .18) / .32);
+        const duration = Number.isFinite(germination.duration) ? germination.duration : 5;
+        const wantedTime = clamp(local) * Math.max(.01, duration - .04);
+        if (germination.readyState >= 2 && !germination.seeking && Math.abs(germination.currentTime - wantedTime) > .025) {
+          germination.currentTime = wantedTime;
+        }
+
+        paintStill(context, stills[1], width, height, 1.07 - local * .02, focus(1));
+        if (germination.readyState >= 2) {
+          context.save();
+          context.globalAlpha = range(local, 0, .08) * (1 - range(local, .92, 1));
+          drawCover(context, germination, width, height, 1.04 + local * .025, focus(1));
+          context.restore();
+        }
+        paintStill(context, stills[2], width, height, 1.045, focus(2), range(local, .91, 1));
+        return;
+      }
+
+      if (p < .61) {
+        const local = range(p, .50, .61);
+        paintStill(context, stills[2], width, height, 1.04 + local * 1.5, [focus(2)[0] - local * .11, focus(2)[1]], 1 - range(local, .48, .82));
+        context.fillStyle = `rgba(190,126,32,${Math.sin(local * Math.PI) * .2})`;
+        context.fillRect(0, 0, width, height);
+        paintStill(context, stills[3], width, height, 1.2 - local * .14, [focus(3)[0] + (1 - local) * .05, focus(3)[1]], range(local, .42, .84));
+        return;
+      }
+
+      if (p < .77) {
+        const local = range(p, .61, .77);
+        paintStill(context, stills[3], width, height, 1.06 + local * .18, [focus(3)[0] - local * .035, focus(3)[1] + local * .02], 1, (local - .5) * -.012);
+        return;
+      }
+
+      if (p < .84) {
+        const local = range(p, .77, .84);
+        paintStill(context, stills[3], width, height, 1.24 + local * .18, focus(3), 1 - range(local, .28, .9), -.012 + local * .018);
+        paintStill(context, stills[4], width, height, 1.17 - local * .09, [focus(4)[0] + (1 - local) * .045, focus(4)[1]], range(local, .2, .84), .01 - local * .01);
+        return;
+      }
+
+      if (p < .91) {
+        const local = range(p, .84, .91);
+        paintStill(context, stills[4], width, height, 1.08 + local * .12, [focus(4)[0] - local * .025, focus(4)[1] - local * .015]);
+        return;
+      }
+
+      const local = range(p, .91, 1);
+      paintStill(context, stills[4], width, height, 1.2 + local * .18, focus(4), 1 - range(local, .12, .72));
+      paintStill(context, stills[5], width, height, 1.13 - local * .1, [focus(5)[0] + (1 - local) * .035, focus(5)[1]], range(local, .08, .66));
+    };
 
     const render = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
       const dpr = Math.min(window.devicePixelRatio || 1, 1.35);
       const target = clamp(progressRef.current);
-      const next = current + (target - current) * .1;
-      current = Math.abs(target - next) < .00008 ? target : next;
-      const virtualFrame = Math.round(current * (VIRTUAL_FRAME_COUNT - 1));
+      const next = current + (target - current) * .115;
+      current = Math.abs(target - next) < .00005 ? target : next;
 
       if (width !== lastWidth || height !== lastHeight) {
         lastWidth = width;
@@ -84,30 +158,10 @@ export default function OliveSequenceCanvas({ progress = 0 }) {
         dirty = true;
       }
 
-      if (dirty || virtualFrame !== lastVirtualFrame) {
-        const smoothProgress = virtualFrame / (VIRTUAL_FRAME_COUNT - 1);
-        const { firstIndex, secondIndex, local, mix } = locateShot(smoothProgress);
-        const first = frames[firstIndex];
-        const second = frames[secondIndex];
-
-        context.setTransform(1, 0, 0, 1, 0, 0);
-        context.fillStyle = '#b9cdd5';
-        context.fillRect(0, 0, canvas.width, canvas.height);
+      if (dirty || Math.abs(current - lastProgress) > .00012) {
         context.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        if (first?.complete && first.naturalWidth) {
-          const [startZoom, endZoom] = SHOTS[firstIndex].zoom;
-          drawCover(context, first, width, height, startZoom + (endZoom - startZoom) * local, SHOTS[firstIndex].focus, SHOTS[firstIndex].mobileFocus);
-        }
-        if (secondIndex !== firstIndex && second?.complete && second.naturalWidth && mix > 0) {
-          const [startZoom, endZoom] = SHOTS[secondIndex].zoom;
-          context.save();
-          context.globalAlpha = mix;
-          drawCover(context, second, width, height, startZoom + (endZoom - startZoom) * mix * .22, SHOTS[secondIndex].focus, SHOTS[secondIndex].mobileFocus);
-          context.restore();
-        }
-
-        lastVirtualFrame = virtualFrame;
+        draw(current, width, height);
+        lastProgress = current;
         dirty = false;
       }
 
@@ -115,7 +169,12 @@ export default function OliveSequenceCanvas({ progress = 0 }) {
     };
 
     raf = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      germination.pause();
+      germination.removeAttribute('src');
+      germination.load();
+    };
   }, []);
 
   return <canvas ref={canvasRef} className="olive-sequence" aria-hidden="true" />;

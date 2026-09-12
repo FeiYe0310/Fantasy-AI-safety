@@ -2,7 +2,7 @@
 @font-face{font-family:"GT Mono";src:url("./assets/fonts/GTStandardMono-Regular.woff2") format("woff2");font-display:swap}
 @font-face{font-family:"Flecha";src:url("./assets/fonts/FlechaM-Light.woff2") format("woff2");font-display:swap;font-weight:300}
 
-:root{font-family:"GT Standard",system-ui,sans-serif;color:#fffdf4;background:#d9eff8;font-synthesis:none;text-rendering:optimizeLegibility}
+:root{font-family:"GT Standard",system-ui,sans-serif;color:#fffdf4;background:#dceaf0;font-synthesis:none;text-rendering:optimizeLegibility}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:5.5rem}
 body{margin:0;min-width:320px;overflow-x:hidden}
@@ -12,10 +12,10 @@ button{font:inherit}
 a:focus-visible,button:focus-visible{outline:3px solid #ffbf41;outline-offset:5px}
 .skip-link{position:fixed;left:1rem;top:1rem;z-index:200;transform:translateY(-180%);padding:.8rem 1.2rem;background:#0b2f38;color:#fffdf4;border-radius:2rem}
 .skip-link:focus{transform:none}
-.site-header{position:fixed;z-index:60;top:0;left:0;right:0;min-height:5.2rem;padding:1.1rem clamp(1.2rem,3vw,3.2rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:1px solid rgba(255,253,244,.24);background:rgba(7,31,37,.62);backdrop-filter:blur(18px);color:#fffdf4;text-shadow:0 2px 12px rgba(2,18,23,.72);font:400 .82rem/1.4 "GT Mono",monospace;letter-spacing:.05em}
+.site-header{position:fixed;z-index:60;top:0;left:0;right:0;min-height:5.2rem;padding:1.1rem clamp(1.2rem,3vw,3.2rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:1px solid rgba(40,70,63,.2);background:rgba(246,241,220,.7);backdrop-filter:blur(18px);color:#173f3c;text-shadow:0 1px 12px rgba(255,253,244,.74);font:500 .82rem/1.4 "GT Mono",monospace;letter-spacing:.05em}
 .site-header nav{display:flex;align-items:center;gap:clamp(1rem,2.4vw,2.8rem)}
 .site-header nav a{transition:color .2s ease}
-.site-header nav a:hover{color:#fffdf4;opacity:.72}
+.site-header nav a:hover{color:#8b641c;opacity:.86}
 .brand{display:flex;align-items:center;gap:.85rem}
 .brand-mark{position:relative;width:1.8rem;height:1.8rem;display:block;flex-shrink:0}
 .eyebrow{font:400 .875rem/1.5 "GT Mono",monospace;text-transform:uppercase}

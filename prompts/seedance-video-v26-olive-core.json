@@ -1,0 +1,50 @@
+{
+  "version": "seedance-video-v26-olive-core",
+  "sourceDir": "artwork-source/olive-core-v26",
+  "workDir": "artwork-source/seedance-video-v26-olive-core",
+  "defaults": {
+    "duration": 5,
+    "ratio": "16:9",
+    "resolution": "720p",
+    "generate_audio": false,
+    "watermark": false,
+    "styleLock": "A luminous nineteenth-century classical oil painting in motion, pale cerulean sky, warm ivory daylight, translucent traditional glazes, restrained visible brushwork, soft atmospheric sfumato, gentle linen-canvas texture, bright but never neon, painterly rather than digitally sharp, no modern cinematic color grade, no photoreal CGI, no text, no logo, no people. Preserve the exact same single olive seed in every shot: realistic small scale, dark translucent olive-jade shell, one natural longitudinal groove, and an antique-gold light within. The camera movement must feel like one continuous physical take with stable geometry, strong foreground parallax, natural lens breathing, and no dissolve, no crossfade, no teleportation, no duplicate seed, no sudden scale jump."
+  },
+  "shots": [
+    {
+      "id": "01-fall-to-earth",
+      "model": "seedance-2.0-fast",
+      "start": "01-fall.png",
+      "end": "02-underground.png",
+      "prompt": "Begin exactly on the supplied celestial landscape. The small olive seed falls from the narrow fracture in the bright sky while the camera curves clockwise around it, keeping the seed as the visual anchor. Gradually accelerate into a close tracking view without changing the seed's real size. The horizon rises behind it; pale cloud, grass, dust and loose soil sweep across the lens as natural foreground occlusion. In one uninterrupted move, the camera follows the seed beneath the surface and settles beside it in the exact earthen chamber of the end frame. The seed remains intact and recognizable throughout."
+    },
+    {
+      "id": "02-germination",
+      "model": "seedance-2.0-mini",
+      "start": "02-underground.png",
+      "end": "03-germinate.png",
+      "prompt": "Continue from the same camera position underground. Make a slow intimate clockwise macro orbit around the single olive seed. Fine soil grains shift, moisture glints, and thin roots from nearby plants create foreground parallax. The shell opens only along its natural longitudinal seam; one pale ivory root descends and one tender green shoot rises. The antique-gold core awakens inside, warm and precious like condensed evidence, organic and unfaceted. End exactly on the supplied germination frame. No time-lapse jump and no extra sprouts."
+    },
+    {
+      "id": "03-enter-the-trunk",
+      "model": "seedance-2.0-fast",
+      "start": "03-germinate.png",
+      "end": "04-trunk.png",
+      "prompt": "The camera leans toward the glowing antique-gold olive-shaped core inside the germinating seed, then follows that exact core into the rising shoot. Bark and translucent plant tissue pass close across the lens as organic occlusion, creating a seamless macro transition into the living trunk interior. The core travels upward through warm amber vascular channels while fine roots and fibers stream past with strong depth and parallax. Preserve the olive silhouette, its single groove, and one continuous direction of travel. Finish exactly at the supplied trunk-interior frame."
+    },
+    {
+      "id": "04-rise-to-branch",
+      "model": "seedance-2.0-fast",
+      "start": "04-trunk.png",
+      "end": "05-branch.png",
+      "prompt": "Keep following the same antique-gold olive-shaped core upward inside the olive tree. The camera banks gently around the trunk's inner channels, changing from a low upward angle to a high lateral angle while fibers, veins and knots sweep past the foreground. Bright sky and silver-green foliage gradually appear through thinner living wood. The core never leaves frame and never changes identity. The movement slows as it reaches a branch junction and lands precisely in the composition of the supplied end frame."
+    },
+    {
+      "id": "05-fruit-and-open-sky",
+      "model": "seedance-2.0-fast",
+      "start": "05-branch.png",
+      "end": "06-fruit.png",
+      "prompt": "From within the branch junction, orbit the same golden olive-shaped core as it reaches the outer twig. Bark and one silver-green leaf wipe naturally across the lens; the camera emerges into luminous daylight without a cut. The glowing core cools into one normal-sized dark olive-jade fruit hanging at the node, retaining a subtle antique-gold seam within. Pull back only enough to reveal leaves, branches and the fully healed cerulean sky. End exactly on the supplied final frame. No giant fruit, no multiplication, no bird, no person."
+    }
+  ]
+}

@@ -1,153 +1,179 @@
 import React, { useEffect, useRef } from 'react';
 
 const clamp = (value) => Math.min(1, Math.max(0, value));
-const smooth = (value) => {
+const ease = (value) => {
   const t = clamp(value);
   return t * t * (3 - 2 * t);
 };
-const range = (value, start, end) => smooth((value - start) / (end - start));
 
-const STILLS = [
-  { file: '01-fall.jpg', focus: [.68, .49], mobile: [.66, .46] },
-  { file: '02-underground.jpg', focus: [.67, .53], mobile: [.69, .5] },
-  { file: '03-germinate.jpg', focus: [.68, .52], mobile: [.7, .5] },
-  { file: '04-trunk.jpg', focus: [.65, .5], mobile: [.68, .5] },
-  { file: '05-branch.jpg', focus: [.66, .5], mobile: [.69, .5] },
-  { file: '06-fruit.jpg', focus: [.7, .48], mobile: [.7, .48] },
+const MEDIA_ROOT = 'olive-core-v27';
+const TIMELINE = [
+  {
+    id: '01-sky-to-soil', from: 0, to: .19, count: 0,
+    fallback: ['01-fall.jpg', '02-underground.jpg'], focus: [.67, .48], mobile: [.68, .48],
+  },
+  {
+    id: '02-root-and-shoot', from: .19, to: .45, count: 91,
+    frames: 'frames/02-root-and-shoot', fallback: ['02-underground.jpg', '03-germinate.jpg'], focus: [.67, .52], mobile: [.7, .5],
+  },
+  {
+    id: '03-through-the-trunk', from: .45, to: .64, count: 0,
+    fallback: ['03-germinate.jpg', '04-trunk.jpg'], focus: [.66, .51], mobile: [.69, .5],
+  },
+  {
+    id: '04-trunk-to-branch', from: .64, to: .83, count: 0,
+    fallback: ['04-trunk.jpg', '05-branch.jpg'], focus: [.65, .5], mobile: [.68, .5],
+  },
+  {
+    id: '05-branch-to-fruit', from: .83, to: 1, count: 0,
+    fallback: ['05-branch.jpg', '06-fruit.jpg'], focus: [.69, .49], mobile: [.7, .48],
+  },
 ];
 
-const drawCover = (context, media, width, height, scale = 1, focus = [.5, .5]) => {
-  const mediaWidth = media.videoWidth || media.naturalWidth;
-  const mediaHeight = media.videoHeight || media.naturalHeight;
-  if (!mediaWidth || !mediaHeight) return;
-  const ratio = Math.max(width / mediaWidth, height / mediaHeight) * scale;
-  const drawWidth = mediaWidth * ratio;
-  const drawHeight = mediaHeight * ratio;
-  context.drawImage(media, (width - drawWidth) * focus[0], (height - drawHeight) * focus[1], drawWidth, drawHeight);
-};
+const frameName = (index) => `${String(index).padStart(4, '0')}.webp`;
 
-const paintStill = (context, image, width, height, scale, focus, alpha = 1, rotation = 0) => {
-  if (!image?.complete || !image.naturalWidth || alpha <= 0) return;
-  context.save();
-  context.globalAlpha = alpha;
-  if (rotation) {
-    context.translate(width / 2, height / 2);
-    context.rotate(rotation);
-    context.translate(-width / 2, -height / 2);
-  }
-  drawCover(context, image, width, height, scale, focus);
-  context.restore();
+const drawCover = (context, image, width, height, scale = 1, focus = [.5, .5]) => {
+  if (!image?.naturalWidth) return false;
+  const ratio = Math.max(width / image.naturalWidth, height / image.naturalHeight) * scale;
+  const drawWidth = image.naturalWidth * ratio;
+  const drawHeight = image.naturalHeight * ratio;
+  context.drawImage(image, (width - drawWidth) * focus[0], (height - drawHeight) * focus[1], drawWidth, drawHeight);
+  return true;
 };
 
 export default function OliveSequenceCanvas({ progress = 0 }) {
   const canvasRef = useRef(null);
   const progressRef = useRef(progress);
+  const scheduleRef = useRef(null);
   progressRef.current = progress;
+
+  useEffect(() => {
+    scheduleRef.current?.();
+  }, [progress]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext('2d', { alpha: false, desynchronized: true });
     if (!canvas || !context) return undefined;
 
-    const base = `${import.meta.env.BASE_URL}olive-core-v26/`;
+    const base = `${import.meta.env.BASE_URL}${MEDIA_ROOT}/`;
+    const fallbackBase = `${import.meta.env.BASE_URL}olive-core-v26/`;
+    let timeline = TIMELINE;
+    const cache = new Map();
+    const fallbacks = new Map();
     let dirty = true;
-    const stills = STILLS.map((shot, index) => {
-      const image = new Image();
-      image.decoding = 'async';
-      image.fetchPriority = index < 2 ? 'high' : 'auto';
-      image.src = `${base}${shot.file}`;
-      image.onload = () => { dirty = true; };
-      return image;
-    });
-
-    const germination = document.createElement('video');
-    germination.src = `${base}02-germination.mp4`;
-    germination.preload = 'auto';
-    germination.muted = true;
-    germination.playsInline = true;
-    germination.load();
-    germination.addEventListener('loadeddata', () => { dirty = true; });
-    germination.addEventListener('seeked', () => { dirty = true; });
-
     let raf = 0;
-    let current = progressRef.current;
-    let lastProgress = -1;
+    let lastFrameKey = '';
     let lastWidth = 0;
     let lastHeight = 0;
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(render);
+    };
+    scheduleRef.current = schedule;
+
+    const touch = (key, image) => {
+      cache.delete(key);
+      cache.set(key, image);
+      while (cache.size > 24) cache.delete(cache.keys().next().value);
+    };
+
+    const loadImage = (url, priority = 'auto') => {
+      const existing = cache.get(url);
+      if (existing) {
+        touch(url, existing);
+        return existing;
+      }
+      const image = new Image();
+      image.decoding = 'async';
+      image.fetchPriority = priority;
+      image.onload = () => { dirty = true; schedule(); };
+      image.src = url;
+      touch(url, image);
+      return image;
+    };
+
+    const loadFallback = (filename) => {
+      if (fallbacks.has(filename)) return fallbacks.get(filename);
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = `${fallbackBase}${filename}`;
+      image.onload = () => { dirty = true; schedule(); };
+      fallbacks.set(filename, image);
+      return image;
+    };
+    TIMELINE.flatMap((segment) => segment.fallback).forEach(loadFallback);
+
+    const manifestController = new AbortController();
+    fetch(`${base}sequence.json`, { signal: manifestController.signal })
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
+      .then((manifest) => {
+        const available = new Map(manifest.segments.map((segment) => [segment.id, segment]));
+        timeline = TIMELINE.map((segment) => ({ ...segment, ...(available.get(segment.id) || {}) }));
+        dirty = true;
+        schedule();
+      })
+      .catch((error) => {
+        if (error.name !== 'AbortError') console.warn('Frame manifest unavailable; using still fallbacks.');
+      });
+
+    const locate = (p) => timeline.find((segment) => p <= segment.to) || timeline.at(-1);
+    const localProgress = (segment, p) => clamp((p - segment.from) / Math.max(.001, segment.to - segment.from));
+    const urlFor = (segment, index) => `${base}${segment.frames}/${frameName(index)}`;
+
+    const preloadWindow = (segment, index) => {
+      if (!segment.frames || !segment.count) return;
+      for (let offset = -5; offset <= 9; offset += 1) {
+        const candidate = Math.max(0, Math.min(segment.count - 1, index + offset));
+        loadImage(urlFor(segment, candidate), Math.abs(offset) < 2 ? 'high' : 'auto');
+      }
+      if (index >= segment.count - 12) {
+        const next = timeline[timeline.indexOf(segment) + 1];
+        if (next?.frames && next.count) {
+          for (let candidate = 0; candidate < Math.min(8, next.count); candidate += 1) loadImage(urlFor(next, candidate));
+        }
+      }
+    };
+
+    const drawFallback = (segment, local, width, height, focus) => {
+      const first = loadFallback(segment.fallback[0]);
+      const last = loadFallback(segment.fallback[1]);
+      const change = ease((local - .7) / .3);
+      context.save();
+      drawCover(context, first, width, height, 1.015 + local * .045, focus);
+      if (last?.naturalWidth && change > 0) {
+        context.globalAlpha = change;
+        drawCover(context, last, width, height, 1.065 - change * .035, focus);
+      }
+      context.restore();
+    };
 
     const draw = (p, width, height) => {
-      const mobile = width < 760;
-      const focus = (index) => mobile ? STILLS[index].mobile : STILLS[index].focus;
-
+      const segment = locate(p);
+      const local = localProgress(segment, p);
+      const focus = width < 760 ? segment.mobile : segment.focus;
       context.fillStyle = '#dceaf0';
       context.fillRect(0, 0, width, height);
 
-      if (p < .18) {
-        const local = range(p, 0, .18);
-        paintStill(context, stills[0], width, height, 1.01 + local * .19, [focus(0)[0] - local * .055, focus(0)[1] + local * .045]);
-        return;
+      if (!segment.frames || !segment.count) {
+        drawFallback(segment, local, width, height, focus);
+        return `${segment.id}:fallback:${Math.round(local * 120)}`;
       }
 
-      if (p < .50) {
-        const local = clamp((p - .18) / .32);
-        const duration = Number.isFinite(germination.duration) ? germination.duration : 5;
-        const wantedTime = clamp(local) * Math.max(.01, duration - .04);
-        if (germination.readyState >= 2 && !germination.seeking && Math.abs(germination.currentTime - wantedTime) > .025) {
-          germination.currentTime = wantedTime;
-        }
-
-        paintStill(context, stills[1], width, height, 1.07 - local * .02, focus(1));
-        if (germination.readyState >= 2) {
-          context.save();
-          context.globalAlpha = range(local, 0, .08) * (1 - range(local, .92, 1));
-          drawCover(context, germination, width, height, 1.04 + local * .025, focus(1));
-          context.restore();
-        }
-        paintStill(context, stills[2], width, height, 1.045, focus(2), range(local, .91, 1));
-        return;
+      const index = Math.min(segment.count - 1, Math.round(local * (segment.count - 1)));
+      preloadWindow(segment, index);
+      const url = urlFor(segment, index);
+      const frame = loadImage(url, 'high');
+      if (!drawCover(context, frame, width, height, 1.035, focus)) {
+        drawFallback(segment, local, width, height, focus);
       }
-
-      if (p < .61) {
-        const local = range(p, .50, .61);
-        paintStill(context, stills[2], width, height, 1.04 + local * 1.5, [focus(2)[0] - local * .11, focus(2)[1]], 1 - range(local, .48, .82));
-        context.fillStyle = `rgba(190,126,32,${Math.sin(local * Math.PI) * .2})`;
-        context.fillRect(0, 0, width, height);
-        paintStill(context, stills[3], width, height, 1.2 - local * .14, [focus(3)[0] + (1 - local) * .05, focus(3)[1]], range(local, .42, .84));
-        return;
-      }
-
-      if (p < .77) {
-        const local = range(p, .61, .77);
-        paintStill(context, stills[3], width, height, 1.06 + local * .18, [focus(3)[0] - local * .035, focus(3)[1] + local * .02], 1, (local - .5) * -.012);
-        return;
-      }
-
-      if (p < .84) {
-        const local = range(p, .77, .84);
-        paintStill(context, stills[3], width, height, 1.24 + local * .18, focus(3), 1 - range(local, .28, .9), -.012 + local * .018);
-        paintStill(context, stills[4], width, height, 1.17 - local * .09, [focus(4)[0] + (1 - local) * .045, focus(4)[1]], range(local, .2, .84), .01 - local * .01);
-        return;
-      }
-
-      if (p < .91) {
-        const local = range(p, .84, .91);
-        paintStill(context, stills[4], width, height, 1.08 + local * .12, [focus(4)[0] - local * .025, focus(4)[1] - local * .015]);
-        return;
-      }
-
-      const local = range(p, .91, 1);
-      paintStill(context, stills[4], width, height, 1.2 + local * .18, focus(4), 1 - range(local, .12, .72));
-      paintStill(context, stills[5], width, height, 1.13 - local * .1, [focus(5)[0] + (1 - local) * .035, focus(5)[1]], range(local, .08, .66));
+      return `${segment.id}:${index}`;
     };
 
     const render = () => {
+      raf = 0;
       const width = window.innerWidth;
       const height = window.innerHeight;
       const dpr = Math.min(window.devicePixelRatio || 1, 1.35);
-      const target = clamp(progressRef.current);
-      const next = current + (target - current) * .115;
-      current = Math.abs(target - next) < .00005 ? target : next;
-
       if (width !== lastWidth || height !== lastHeight) {
         lastWidth = width;
         lastHeight = height;
@@ -158,22 +184,29 @@ export default function OliveSequenceCanvas({ progress = 0 }) {
         dirty = true;
       }
 
-      if (dirty || Math.abs(current - lastProgress) > .00012) {
+      const target = clamp(progressRef.current);
+      const segment = locate(target);
+      const local = localProgress(segment, target);
+      const expectedKey = segment.frames && segment.count
+        ? `${segment.id}:${Math.min(segment.count - 1, Math.round(local * (segment.count - 1)))}`
+        : `${segment.id}:fallback:${Math.round(local * 120)}`;
+
+      if (dirty || expectedKey !== lastFrameKey) {
         context.setTransform(dpr, 0, 0, dpr, 0, 0);
-        draw(current, width, height);
-        lastProgress = current;
+        lastFrameKey = draw(target, width, height);
         dirty = false;
       }
-
-      raf = requestAnimationFrame(render);
     };
 
-    raf = requestAnimationFrame(render);
+    window.addEventListener('resize', schedule);
+    schedule();
     return () => {
       cancelAnimationFrame(raf);
-      germination.pause();
-      germination.removeAttribute('src');
-      germination.load();
+      window.removeEventListener('resize', schedule);
+      manifestController.abort();
+      scheduleRef.current = null;
+      cache.clear();
+      fallbacks.clear();
     };
   }, []);
 

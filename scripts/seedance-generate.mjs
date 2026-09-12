@@ -28,11 +28,16 @@ const selected = process.argv.includes('--all')
 if (!selected.length) throw new Error('Select --all or one or more --shot=<id> values.');
 
 const estimatedRates = {
-  'seedance-2.0-mini': 0.21,
-  'seedance-2.0-fast': 0.46,
-  'seedance-2.5': 1.36,
+  '480p': { 'seedance-2.0-mini': 0.097, 'seedance-2.0-fast': 0.21, 'seedance-2.5': 0.6 },
+  '720p': { 'seedance-2.0-mini': 0.21, 'seedance-2.0-fast': 0.46, 'seedance-2.5': 1.36 },
+  '1080p': { 'seedance-2.5': 2.55 },
 };
-const estimatedCost = selected.reduce((sum, shot) => sum + estimatedRates[shot.model] * spec.defaults.duration, 0);
+const estimatedCost = selected.reduce((sum, shot) => {
+  const resolution = shot.resolution || spec.defaults.resolution;
+  const rate = estimatedRates[resolution]?.[shot.model];
+  if (!rate) throw new Error(`No price configured for ${shot.model} at ${resolution}.`);
+  return sum + rate * (shot.duration || spec.defaults.duration);
+}, 0);
 if (estimatedCost > 50) throw new Error(`Estimated cost ${estimatedCost.toFixed(2)} exceeds the 50 CNY hard limit.`);
 
 await mkdir(outputDir, { recursive: true });
@@ -59,7 +64,8 @@ async function uploadImage(filename) {
   const filePath = path.join(sourceDir, filename);
   const buffer = await readFile(filePath);
   const form = new FormData();
-  form.append('file', new Blob([buffer], { type: 'image/png' }), filename);
+  const mimeType = /\.jpe?g$/i.test(filename) ? 'image/jpeg' : 'image/png';
+  form.append('file', new Blob([buffer], { type: mimeType }), filename);
   const uploaded = unwrap(await request(`${apiBase}/api/v3/files/uploads`, { method: 'POST', headers: auth, body: form }));
   const id = uploaded.id ?? uploaded.file_id;
   if (!id) throw new Error(`Upload response did not include a file id: ${JSON.stringify(uploaded)}`);
@@ -88,9 +94,9 @@ async function createTask(shot, references) {
       { type: 'text', text: `${spec.defaults.styleLock} ${shot.prompt}` },
       ...references.map(({ url }) => ({ type: 'image_url', image_url: { url }, role: 'reference_image' })),
     ],
-    duration: spec.defaults.duration,
+    duration: shot.duration || spec.defaults.duration,
     ratio: spec.defaults.ratio,
-    resolution: spec.defaults.resolution,
+    resolution: shot.resolution || spec.defaults.resolution,
     generate_audio: spec.defaults.generate_audio,
     watermark: spec.defaults.watermark,
   };

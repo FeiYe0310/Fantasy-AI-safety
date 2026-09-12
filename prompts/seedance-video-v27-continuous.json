@@ -1,0 +1,46 @@
+{
+  "version": "seedance-video-v27-continuous",
+  "openingFrame": "artwork-source/olive-core-v26/01-fall.png",
+  "sourceDir": "artwork-source/olive-core-v27-chain/inputs",
+  "workDir": "artwork-source/seedance-video-v27-continuous",
+  "defaults": {
+    "duration": 5,
+    "ratio": "16:9",
+    "resolution": "720p",
+    "generate_audio": false,
+    "watermark": false,
+    "styleLock": "One uninterrupted clockwise camera journey in a luminous nineteenth-century classical oil painting. Pale cerulean daylight always arrives from upper left, with warm ivory atmosphere, translucent traditional glazes, soft sfumato and restrained linen-canvas texture. Painterly, quiet and epic; never digitally sharp, never CGI, never neon. Preserve the exact same single olive in every shot: naturally small scale, dark translucent olive-jade shell, one longitudinal groove and an antique-gold living core. Stable anatomy and geometry, physical parallax, constant lens character and continuous forward camera direction. The first frame must match the supplied start image exactly and the last frame must match the supplied target image exactly. No cut, dissolve, crossfade, teleportation, duplicate object, scale jump, text, logo, person or bird."
+  },
+  "shots": [
+    {
+      "id": "01-sky-to-soil",
+      "model": "seedance-2.0-mini",
+      "targetFrame": "artwork-source/olive-core-v26/02-underground.png",
+      "prompt": "Continue from the opening frame. Track the small falling olive while curving clockwise from a high three-quarter view toward its lower left side. The olive remains the sole visual anchor as cloud and distant ground create increasing parallax. Descend with it into grass; loose earth sweeps fully across the lens as an opaque practical wipe. Continue through that same moving earth into the underground chamber. Settle beside the unchanged olive in the exact target composition, with the light still implied from upper left."
+    },
+    {
+      "id": "02-root-and-shoot",
+      "model": "seedance-2.0-mini",
+      "targetFrame": "artwork-source/olive-core-v26/03-germinate.png",
+      "prompt": "Continue from the previous generated final frame, without resetting the camera. Maintain the slow clockwise macro orbit. Moist soil grains and one slender root cross extremely close to the lens, briefly covering the entire frame before revealing the same olive opening only along its natural groove. One ivory root grows downward and one tender shoot rises. The antique-gold core wakes inside the shell. End with the shoot and glowing core filling the target composition; no timelapse jump and no extra plant."
+    },
+    {
+      "id": "03-through-the-trunk",
+      "model": "seedance-2.0-mini",
+      "targetFrame": "artwork-source/olive-core-v26/04-trunk.png",
+      "prompt": "Continue from that exact germination frame. Lean toward the antique-gold olive-shaped core and follow it upward into the shoot. A translucent green stem and a strip of forming bark pass completely across the lens as an organic wipe, changing scale naturally rather than cutting. Emerge inside the growing trunk with the same clockwise camera drift and upper-left light. The core keeps its olive silhouette and single groove while moving upward through amber vascular channels. Finish exactly in the target trunk-interior frame."
+    },
+    {
+      "id": "04-trunk-to-branch",
+      "model": "seedance-2.0-mini",
+      "targetFrame": "artwork-source/olive-core-v26/05-branch.png",
+      "prompt": "Continue upward from the previous generated final frame. Follow the same gold core through one continuous channel while the camera banks clockwise from low vertical tracking to a lateral branch path. Wood fibres, a knot and a close strip of bark each create strong foreground parallax; the last bark strip wipes across the full lens. Daylight and silver-green foliage appear beyond thinning wood. Reveal the target branch junction without losing or replacing the olive core."
+    },
+    {
+      "id": "05-branch-to-fruit",
+      "model": "seedance-2.0-mini",
+      "targetFrame": "artwork-source/olive-core-v26/06-fruit.png",
+      "prompt": "Continue from the exact branch junction. Orbit clockwise with the same lens and light while following the single core to the outer twig. One silver-green leaf passes across and completely covers the camera, then reveals open ivory daylight in the same direction of movement. The gold core cools into one normal-sized dark olive-jade fruit at the node, retaining a faint antique-gold seam. Ease back just enough to reveal the healed pale cerulean sky and finish precisely on the target frame."
+    }
+  ]
+}

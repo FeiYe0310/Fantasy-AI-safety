@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "video:generate": "node scripts/seedance-generate.mjs"
+    "video:generate": "node scripts/seedance-generate.mjs",
+    "video:chain": "node scripts/chain-video-shots.mjs",
+    "frames:encode": "node scripts/encode-frame-sequence.mjs",
+    "frames:build-chain": "node scripts/build-frame-chain.mjs",
+    "pipeline:continuous": "npm run video:chain && npm run frames:build-chain"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -17,6 +21,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "sharp": "^0.34.3",
     "vite": "^6.0.0"
   },
   "skill-orchestrator": {

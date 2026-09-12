@@ -1,4 +1,4 @@
-.olive-road{position:relative;height:2500svh;background:#c8dde4}
+.olive-road{position:relative;height:3100svh;background:#c8dde4}
 .olive-anchor{position:absolute;left:0;width:1px;height:1px;pointer-events:none}
 .olive-stage{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate;background:#c8dde4;color:#fffdf4}
 .olive-world{position:absolute;inset:0;z-index:-4;overflow:hidden;background:#c8dde4}
@@ -35,7 +35,7 @@
 .brand-mark em{left:.82rem;top:.8rem;width:4px;height:4px;border-radius:50%;background:#123c4c}
 
 @media(max-width:850px){
-  .olive-road{height:2300svh}.olive-grade--left,.olive-grade--right{background:linear-gradient(0deg,rgba(7,31,37,.9) 0%,rgba(7,31,37,.7) 48%,rgba(7,31,37,.18) 74%,transparent 88%);opacity:1!important}
+  .olive-road{height:2900svh}.olive-grade--left,.olive-grade--right{background:linear-gradient(0deg,rgba(7,31,37,.9) 0%,rgba(7,31,37,.7) 48%,rgba(7,31,37,.18) 74%,transparent 88%);opacity:1!important}
   .olive-scene,.olive-scene--right{left:1.3rem;right:1.3rem;top:auto;bottom:6.3rem;width:auto;transform:translateY(var(--chapter-drift,0vh))}
   .olive-scene h1,.olive-scene h2{font-size:clamp(2.65rem,11.5vw,4.6rem);line-height:.91}
   .olive-narrative{gap:.38rem;margin-top:.75rem}.olive-narrative p{max-width:34rem;font-size:1rem;line-height:1.42}.olive-note{margin-top:.7rem;font-size:1rem;line-height:1.4}.olive-nav{display:none}.scroll-cue{display:none}.story-index{left:1.3rem;right:1.3rem;bottom:1.4rem}

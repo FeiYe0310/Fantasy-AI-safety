@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const VIRTUAL_FRAME_COUNT = 320;
+const VIRTUAL_FRAME_COUNT = 400;
 const clamp = (value) => Math.min(1, Math.max(0, value));
 const smoother = (value) => {
   const t = clamp(value);
@@ -8,14 +8,16 @@ const smoother = (value) => {
 };
 
 const SHOTS = [
-  { file: '01-the-crack.jpg', at: 0, focus: [.64, .5], mobileFocus: .68, zoom: [1.01, 1.055] },
-  { file: '02-plant-the-pit.jpg', at: .14, focus: [.65, .54], mobileFocus: .68, zoom: [1.015, 1.06] },
-  { file: '03-roots-of-evidence.jpg', at: .28, focus: [.4, .54], mobileFocus: .42, zoom: [1.01, 1.055] },
-  { file: '04-the-tree-grows.jpg', at: .42, focus: [.67, .51], mobileFocus: .69, zoom: [1.01, 1.05] },
-  { file: '05-the-leaf-is-chosen.jpg', at: .56, focus: [.39, .48], mobileFocus: .42, zoom: [1.015, 1.06] },
-  { file: '06-evidence-to-carry.jpg', at: .69, focus: [.67, .47], mobileFocus: .69, zoom: [1.01, 1.055] },
-  { file: '07-mend-the-sky.jpg', at: .82, focus: [.67, .46], mobileFocus: .7, zoom: [1.005, 1.05] },
-  { file: '08-peace-verified.jpg', at: .94, focus: [.38, .47], mobileFocus: .4, zoom: [1.01, 1.045] },
+  { file: '01-heaven-breaks.jpg', at: 0, focus: [.66, .5], mobileFocus: .72, zoom: [1.005, 1.045] },
+  { file: '02-olive-falls.jpg', at: .1, focus: [.66, .5], mobileFocus: .7, zoom: [1.01, 1.055] },
+  { file: '03-nuwa-catches.jpg', at: .2, focus: [.34, .49], mobileFocus: .36, zoom: [1.015, 1.06] },
+  { file: '04-plant-the-pit.jpg', at: .3, focus: [.65, .54], mobileFocus: .68, zoom: [1.015, 1.06] },
+  { file: '05-roots-of-evidence.jpg', at: .41, focus: [.4, .54], mobileFocus: .42, zoom: [1.01, 1.055] },
+  { file: '06-the-tree-grows.jpg', at: .52, focus: [.67, .51], mobileFocus: .69, zoom: [1.01, 1.05] },
+  { file: '07-the-leaf-is-chosen.jpg', at: .63, focus: [.39, .48], mobileFocus: .42, zoom: [1.015, 1.06] },
+  { file: '08-evidence-to-carry.jpg', at: .73, focus: [.67, .47], mobileFocus: .69, zoom: [1.01, 1.055] },
+  { file: '09-mend-the-sky.jpg', at: .83, focus: [.67, .46], mobileFocus: .7, zoom: [1.005, 1.05] },
+  { file: '10-peace-verified.jpg', at: .94, focus: [.38, .47], mobileFocus: .4, zoom: [1.01, 1.045] },
 ];
 
 const drawCover = (context, image, width, height, scale, focus, mobileFocus) => {
@@ -52,7 +54,7 @@ export default function OliveSequenceCanvas({ progress = 0 }) {
       const image = new Image();
       image.decoding = 'async';
       image.fetchPriority = index < 2 ? 'high' : 'auto';
-      image.src = `${base}olive-oil-story-v24/${shot.file}`;
+      image.src = `${base}olive-oil-story-v25/${shot.file}`;
       image.onload = () => { dirty = true; };
       return image;
     });

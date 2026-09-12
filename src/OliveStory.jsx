@@ -9,25 +9,43 @@ const enter = (p, start, end) => ease((p - start) / (end - start));
 
 const chapters = [
   {
-    id: 'opening', at: 0, kicker: 'CHAPTER I · THE LAST OLIVE', title: ['Heaven broke.', 'One olive remained.'],
+    id: 'opening', at: 0, kicker: 'CHAPTER I · THE WOUND', title: ['The sky forgot', 'how to hold.'],
     paragraphs: [
-      'A bright fracture crossed the sky. It looked narrow from the ground, but every powerful action widened it: one unchecked assumption, one missing source, one decision no one could reconstruct.',
-      'Nüwa, the creator who once repaired heaven, could have reached immediately for spectacle. Instead she caught the last olive beneath the fracture and held it beside the wound.',
-      'The groove in the fruit resembled the crack above. Before she repaired the sky, she chose to understand what could make a repair endure.',
+      'The sky did not break all at once. First, it forgot how to hold itself together. A bright fracture crossed the blue, widening with every powerful action no one could inspect or reverse.',
+      'Below it stood Nüwa—the creator who had once repaired heaven. This time she carried no ready-made stone, no promise that authority alone could make the world safe.',
+      'She looked into the wound and waited. Before a repair could begin, the failure had to become visible.',
     ],
-    note: 'A visible failure is often only the surface of a deeper system.',
+    note: 'What cannot be seen cannot be challenged in time.',
   },
   {
-    id: 'seed', at: .14, kicker: 'CHAPTER II · THE SEED', title: ['She planted the answer', 'instead of performing it.'],
+    id: 'fall', at: .1, kicker: 'CHAPTER II · THE FALL', title: ['Then, from the fracture,', 'an olive fell.'],
     paragraphs: [
-      'Nüwa opened the olive and lowered its pit into the same earth that had carried the failure. The gesture was small enough to miss, but it changed the order of the story.',
-      'The repair would not be granted authority because a goddess made it. It would have to survive the soil, expose its dependencies, and earn the right to grow toward the fracture.',
+      'It was neither weapon nor answer—only one dark-green fruit descending through impossible light. Its groove carried the same shape as the wound above.',
+      'The olive brought no proof of where it came from or what it would become. It was capability in its earliest form: concentrated possibility, falling faster than understanding.',
+      'Nüwa did not worship the object, and she did not destroy it. She stepped beneath its path.',
+    ],
+    note: 'Novel power arrives before its consequences are fully known.',
+  },
+  {
+    id: 'catch', at: .2, side: 'right', kicker: 'CHAPTER III · THE CATCH', title: ['Nüwa received', 'what the sky released.'],
+    paragraphs: [
+      'She caught the olive with both hands—not as an owner, but as a custodian. The distance between falling and impact became the first space in which a decision could still change.',
+      'Up close, the resemblance was undeniable: the olive groove and the celestial fracture were two versions of the same unknown path. One could become the means to understand the other.',
+      'But receiving a powerful object is not the same as trusting it. Nüwa carried it toward the earth, where its hidden structure could be tested by time, resistance, and evidence.',
+    ],
+    note: 'Safety begins where action remains interruptible.',
+  },
+  {
+    id: 'seed', at: .3, kicker: 'CHAPTER IV · THE SEED', title: ['She planted the unknown', 'instead of performing certainty.'],
+    paragraphs: [
+      'Nüwa opened the olive and lowered its pit into the same earth that had carried the consequences of the broken sky. The gesture was small enough to miss, but it changed the order of the story.',
+      'The olive would not be granted authority because a goddess had touched it. It would have to survive the soil, expose its dependencies, and earn the right to grow toward the fracture.',
       'AI safety begins the same way: not with a promise placed over capability, but with verification planted inside the process that produces it.',
     ],
     note: 'Do not begin with trust. Begin with a path that can be checked.',
   },
   {
-    id: 'roots', at: .28, side: 'right', kicker: 'CHAPTER III · FIVE ROOTS', title: ['Verification', 'had to grow first.'],
+    id: 'roots', at: .41, side: 'right', kicker: 'CHAPTER V · FIVE ROOTS', title: ['Verification', 'had to grow first.'],
     paragraphs: [
       'Jade tested boundaries and permissions. Cinnabar applied adversarial pressure. Ochre followed evidence and calibration. Ivory exposed the process. Indigo preserved uncertainty, interruption, and recovery.',
       'The roots disagreed as they moved through water, stone, and salt. Nüwa did not erase the disagreement. Independent paths were valuable precisely because one confident root could still be wrong.',
@@ -36,7 +54,7 @@ const chapters = [
     note: 'Redundancy is not repetition when each verifier can expose a different failure.',
   },
   {
-    id: 'mission', at: .42, kicker: 'CHAPTER IV · THE TREE', title: ['Capability grew.', 'Safeguards grew with it.'],
+    id: 'mission', at: .52, kicker: 'CHAPTER VI · THE TREE', title: ['Capability grew.', 'Safeguards grew with it.'],
     paragraphs: [
       'The olive became a tree. Every new branch expanded what it could reach; every living vein preserved a way to observe, question, limit, and stop what travelled through it.',
       'This is our mission: abundant verification tokens—enough compute, time, evidence, criticism, human judgment, and recovery capacity to challenge powerful actions before they enter the world.',
@@ -45,16 +63,16 @@ const chapters = [
     note: 'Power becomes safer when the means to challenge it scale alongside it.',
   },
   {
-    id: 'leaf', at: .56, side: 'right', kicker: 'CHAPTER V · THE LEAF', title: ['One leaf carried', 'the whole path.'],
+    id: 'leaf', at: .63, side: 'right', kicker: 'CHAPTER VII · THE LEAF', title: ['One leaf carried', 'the whole path.'],
     paragraphs: [
       'Among thousands of leaves, Nüwa chose one whose veins still revealed every path below: boundary checks, adversarial tests, evidence, transparency, and recovery.',
-      'The five colours were not painted on its surface. They lived inside its structure, faint enough to require attention and continuous enough to trace back through branch, trunk, root, and seed.',
-      'The olive remained an olive. Verification did not replace the object; it made the object answerable.',
+      'The five colours were not painted on its surface. They lived inside its structure, continuous enough to trace back through branch, trunk, root, pit, and the olive that had fallen from the sky.',
+      'Verification did not replace the olive. It made the olive answerable.',
     ],
     note: 'The result matters. Its inspectable history matters too.',
   },
   {
-    id: 'verification', at: .69, kicker: 'CHAPTER VI · THE PROOF', title: ['She chose what', 'another mind could trace.'],
+    id: 'verification', at: .73, kicker: 'CHAPTER VIII · THE PROOF', title: ['She chose what', 'another mind could trace.'],
     paragraphs: [
       'Nüwa turned the leaf toward the light. From another angle the evidence still held. No colour disappeared when the surface changed, and no convenient story replaced a missing link.',
       'Our research follows those veins: verifier models, process supervision, mechanistic interpretability, debate and critique, evidence-carrying outputs, runtime monitoring, calibrated interruption, and recovery.',
@@ -63,16 +81,16 @@ const chapters = [
     note: 'Confidence is not permission. Traceable evidence can become one.',
   },
   {
-    id: 'mend', at: .82, kicker: 'CHAPTER VII · MEND THE SKY', title: ['Only verified structure', 'touched the wound.'],
+    id: 'mend', at: .83, kicker: 'CHAPTER IX · MEND THE SKY', title: ['Only verified structure', 'touched the wound.'],
     paragraphs: [
       'Nüwa carried the leaf upward and placed its edge against the fracture. She did not cover the whole sky with light. The crack closed only where the living evidence made contact.',
       'Root by root, vein by vein, the repair joined the world it was meant to protect. The remaining fracture stayed visible until there was enough verified structure to close it honestly.',
-      'That restraint is the point: safety is not a beautiful layer over an opaque system. It is the capacity to know where an action came from—and still intervene before it becomes irreversible.',
+      'Safety is not a beautiful layer over an opaque system. It is the capacity to know where an action came from—and still intervene before it becomes irreversible.',
     ],
     note: 'A repair is trustworthy when it preserves the evidence that justified it.',
   },
   {
-    id: 'peace', at: .94, side: 'right', kicker: 'CHAPTER VIII · PEACE, VERIFIED', title: ['Peace was not declared.', 'It was earned.'],
+    id: 'peace', at: .94, side: 'right', kicker: 'CHAPTER X · PEACE, VERIFIED', title: ['Peace was not declared.', 'It was earned.'],
     paragraphs: [
       'The repaired blue held. The olive tree remained rooted beneath it, carrying every disagreement and correction that had made the repair possible. A white dove lifted one branch into the clear air.',
       'The leaf became a symbol of peace only after planting, growth, challenge, inspection, selection, and repair. What endured was not perfect certainty, but a system with enough evidence and recovery capacity to remain answerable.',
@@ -84,8 +102,9 @@ const chapters = [
 ];
 
 const visualWindows = [
-  { from: 0, to: .105 }, { from: .115, to: .245 }, { from: .255, to: .385 }, { from: .395, to: .525 },
-  { from: .535, to: .655 }, { from: .665, to: .785 }, { from: .795, to: .915 }, { from: .925, to: 1 },
+  { from: 0, to: .075 }, { from: .085, to: .175 }, { from: .185, to: .275 }, { from: .285, to: .375 },
+  { from: .395, to: .485 }, { from: .505, to: .595 }, { from: .615, to: .695 }, { from: .715, to: .785 },
+  { from: .805, to: .895 }, { from: .925, to: 1 },
 ];
 
 const phaseOpacity = (p, index) => {
@@ -107,7 +126,7 @@ export default function OliveStory() {
   };
 
   return (
-    <section className="olive-road" ref={ref} aria-label="The verified olive, carried by Nüwa">
+    <section className="olive-road" ref={ref} aria-label="The olive that fell from heaven, carried by Nüwa">
       {chapters.map(chapter => <span key={chapter.id} id={reduced ? undefined : chapter.id} className="olive-anchor" aria-hidden="true" style={{ top: `calc((100% - 100svh) * ${chapter.at})` }} />)}
       <div className="olive-stage">
         <div className="olive-world" aria-hidden="true">
@@ -142,7 +161,7 @@ export default function OliveStory() {
           })}
         </div>
 
-        <div className="story-index" aria-hidden="true"><span>{String(active + 1).padStart(2, '0')}</span><i style={{ transform: `scaleX(${progress})` }} /><b>{['WITNESS', 'PLANT', 'VERIFY', 'GROW', 'CHOOSE', 'TRACE', 'MEND', 'PEACE'][active]}</b></div>
+        <div className="story-index" aria-hidden="true"><span>{String(active + 1).padStart(2, '0')}</span><i style={{ transform: `scaleX(${progress})` }} /><b>{['WITNESS', 'FALL', 'RECEIVE', 'PLANT', 'VERIFY', 'GROW', 'CHOOSE', 'TRACE', 'MEND', 'PEACE'][active]}</b></div>
         <nav className="olive-nav" aria-label="Story chapters">
           {chapters.map(chapter => <button key={chapter.id} onClick={() => jumpTo(chapter.at)} aria-current={Math.abs(progress - chapter.at) < .06 ? 'step' : undefined}>{chapter.kicker.split(' · ')[1]}</button>)}
         </nav>

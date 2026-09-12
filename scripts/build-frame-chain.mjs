@@ -41,4 +41,8 @@ for (const shot of spec.shots) {
 const manifest = { version: 1, format: 'webp', fps, segments };
 await writeFile(path.join(outputRoot, 'sequence.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 console.log(`Wrote ${path.join(outputRoot, 'sequence.json')}`);
-
+if (segments.every((segment) => segment.count > 0)) {
+  await run(process.execPath, ['scripts/retime-frame-timeline.mjs', outputRoot]);
+} else {
+  console.warn('Skipping global retiming until all five source clips are available.');
+}

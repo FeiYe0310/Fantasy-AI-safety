@@ -11,6 +11,8 @@
     "video:chain": "node scripts/chain-video-shots.mjs",
     "frames:encode": "node scripts/encode-frame-sequence.mjs",
     "frames:build-chain": "node scripts/build-frame-chain.mjs",
+    "frames:retime": "node scripts/retime-frame-timeline.mjs",
+    "frames:analyze": "node scripts/analyze-frame-boundaries.mjs",
     "pipeline:continuous": "npm run video:chain && npm run frames:build-chain"
   },
   "dependencies": {

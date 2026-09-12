@@ -1,9 +1,9 @@
-.olive-road{position:relative;height:2500svh;background:#dceaf0}
+.olive-road{position:relative;height:calc(100svh + var(--film-scroll-px,17840px));background:#dceaf0}
 .olive-anchor{position:absolute;left:0;width:1px;height:1px;pointer-events:none}
 .olive-stage{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate;background:#dceaf0;color:#fffdf4}
 .olive-world{position:absolute;inset:0;z-index:-4;overflow:hidden;background:#dceaf0}
 .olive-sequence{position:absolute;inset:0;width:100%;height:100%;z-index:1;will-change:transform;filter:brightness(1.07) saturate(.88) contrast(.98);transform-origin:68% 54%}
-.olive-grade{position:absolute;inset:0;z-index:2;pointer-events:none;transition:background .55s ease}
+.olive-grade{position:absolute;inset:0;z-index:2;pointer-events:none}
 .olive-grade--left{background:linear-gradient(90deg,rgba(19,46,45,.67) 0%,rgba(25,52,48,.5) 23%,rgba(26,55,50,.18) 38%,transparent 52%),linear-gradient(0deg,rgba(18,52,55,.12),transparent 45%)}
 .olive-grade--right{background:linear-gradient(270deg,rgba(19,46,45,.67) 0%,rgba(25,52,48,.5) 23%,rgba(26,55,50,.18) 38%,transparent 52%),linear-gradient(0deg,rgba(18,52,55,.12),transparent 45%)}
 .olive-paint{position:absolute;inset:-12%;z-index:3;opacity:.42;mix-blend-mode:soft-light;background:repeating-linear-gradient(7deg,rgba(255,250,232,.12) 0 1px,transparent 1px 5px),repeating-linear-gradient(94deg,rgba(64,44,20,.05) 0 1px,transparent 1px 7px);filter:blur(.25px);pointer-events:none}
@@ -11,13 +11,13 @@
 .olive-copy{position:absolute;inset:0;z-index:7;pointer-events:none}
 .olive-scene{position:absolute;left:clamp(1.5rem,5vw,5.5rem);top:50%;width:min(39rem,36vw);transform:translateY(calc(-50% + var(--chapter-drift,0vh)));transform-origin:left center;will-change:opacity,transform;pointer-events:auto;text-shadow:0 2px 4px rgba(2,18,23,.92),0 8px 28px rgba(2,18,23,.63)}
 .olive-scene--right{left:auto;right:clamp(1.5rem,5vw,5.5rem);transform-origin:right center}
-.olive-scene .eyebrow{margin:0 0 .8rem;color:#fffdf4;font-size:.7rem;font-weight:600;letter-spacing:.15em;transition:opacity .16s linear,transform .28s ease-out}
-.olive-scene h1,.olive-scene h2{margin:0;font:300 clamp(2.9rem,4.45vw,5.45rem)/.93 "Flecha",serif;letter-spacing:-.046em;color:#fffdf4;transition:opacity .18s linear,transform .32s ease-out}
+.olive-scene .eyebrow{margin:0 0 .8rem;color:#fffdf4;font-size:.7rem;font-weight:600;letter-spacing:.15em}
+.olive-scene h1,.olive-scene h2{margin:0;font:300 clamp(2.9rem,4.45vw,5.45rem)/.93 "Flecha",serif;letter-spacing:-.046em;color:#fffdf4}
 .olive-scene h1 span,.olive-scene h2 span{display:block}
 .olive-narrative{display:grid;gap:.5rem;margin-top:1rem;max-width:39rem}
-.olive-narrative p{margin:0;color:#fffdf4;font-size:clamp(.96rem,.91vw,1.03rem);font-weight:500;line-height:1.48;transition:opacity .18s linear,transform .32s ease-out}
-.olive-note{margin:.9rem 0 0;padding-left:1rem;max-width:38rem;border-left:2px solid rgba(234,218,161,.95);color:#fffdf4;font:500 clamp(.96rem,.94vw,1.03rem)/1.43 "GT Standard",sans-serif;font-style:italic;transition:opacity .2s linear}
-.olive-actions{display:flex;gap:1.2rem;align-items:center;margin-top:1rem;font-size:.82rem;flex-wrap:wrap;transition:opacity .2s linear}
+.olive-narrative p{margin:0;color:#fffdf4;font-size:clamp(.96rem,.91vw,1.03rem);font-weight:500;line-height:1.48}
+.olive-note{margin:.9rem 0 0;padding-left:1rem;max-width:38rem;border-left:2px solid rgba(234,218,161,.95);color:#fffdf4;font:500 clamp(.96rem,.94vw,1.03rem)/1.43 "GT Standard",sans-serif;font-style:italic}
+.olive-actions{display:flex;gap:1.2rem;align-items:center;margin-top:1rem;font-size:.82rem;flex-wrap:wrap}
 .olive-actions>a:not(.olive-primary){border-bottom:1px solid rgba(255,253,244,.68);padding-bottom:.2rem}
 .olive-primary{display:inline-flex;align-items:center;padding:.64rem .7rem .64rem 1.1rem;border:1px solid rgba(255,248,222,.54);border-radius:3rem;background:rgba(28,64,57,.82);color:#fffdf4;text-shadow:none;box-shadow:0 10px 35px rgba(11,35,30,.19)}
 .olive-primary span{display:grid;place-items:center;width:1.9rem;height:1.9rem;margin-left:.9rem;border-radius:50%;background:rgba(255,253,244,.18);color:#fffdf4}
@@ -27,17 +27,18 @@
 .olive-nav{position:absolute;z-index:12;right:clamp(1.5rem,3vw,3rem);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:flex-end;gap:.22rem}
 .olive-nav--left{right:auto;left:clamp(1.5rem,3vw,3rem);align-items:flex-start}
 .olive-nav button{border:0;background:transparent;color:#fffdf4;opacity:.68;padding:.4rem;cursor:pointer;font:500 .62rem/1 "GT Mono",monospace;letter-spacing:.07em;text-shadow:0 2px 12px rgba(2,18,23,.9)}
-.olive-nav button::after{content:"";display:inline-block;width:1.2rem;height:1px;margin-left:.65rem;vertical-align:middle;background:currentColor;transition:width .3s}
+.olive-nav button::after{content:"";display:inline-block;width:1.2rem;height:1px;margin-left:.65rem;vertical-align:middle;background:currentColor}
 .olive-nav button[aria-current]{color:#fffdf4;opacity:1}.olive-nav button[aria-current]::after{width:2.5rem}
 .scroll-cue{position:absolute;left:50%;bottom:1.35rem;z-index:11;transform:translateX(-50%);margin:0;font:400 .64rem/1 "GT Mono",monospace;letter-spacing:.11em;color:#fffdf4;text-shadow:0 2px 12px rgba(2,18,23,.9)}
 .scroll-cue span{margin-left:.65rem}
+.film-diagnostics{position:absolute;z-index:20;right:1rem;bottom:1rem;margin:0;padding:.65rem .75rem;background:rgba(2,18,23,.82);color:#d7f8df;border:1px solid rgba(215,248,223,.28);font:11px/1.45 "GT Mono",monospace;pointer-events:none;white-space:pre-wrap}
 .brand-mark i,.brand-mark b,.brand-mark em{position:absolute;display:block}
 .brand-mark i{left:.05rem;top:.82rem;width:1.55rem;height:2px;background:#a77517;transform:rotate(-18deg)}
 .brand-mark b{left:.85rem;top:.65rem;width:.72rem;height:.42rem;border:2px solid #277865;border-radius:100% 0 100% 0;transform:rotate(-22deg)}
 .brand-mark em{left:.82rem;top:.8rem;width:4px;height:4px;border-radius:50%;background:#174550}
 
 @media(max-width:850px){
-  .olive-road{height:2300svh}
+  .olive-road{height:calc(100svh + var(--film-scroll-px,13380px))}
   .olive-grade--left,.olive-grade--right{background:linear-gradient(0deg,rgba(16,47,48,.87) 0%,rgba(20,53,50,.67) 48%,rgba(20,52,49,.17) 76%,transparent 89%)}
   .olive-scene,.olive-scene--right{left:1.3rem;right:1.3rem;top:auto;bottom:6.1rem;width:auto;transform:translateY(var(--chapter-drift,0vh))}
   .olive-scene h1,.olive-scene h2{font-size:clamp(2.6rem,11vw,4.5rem);line-height:.92}

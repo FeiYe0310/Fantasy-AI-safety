@@ -1,11 +1,32 @@
 {
   "version": 1,
   "format": "webp",
+  "fps": 18,
   "segments": [
-    { "id": "01-sky-to-soil", "count": 0 },
-    { "id": "02-root-and-shoot", "frames": "frames/02-root-and-shoot", "count": 91 },
-    { "id": "03-through-the-trunk", "count": 0 },
-    { "id": "04-trunk-to-branch", "count": 0 },
-    { "id": "05-branch-to-fruit", "count": 0 }
+    {
+      "id": "01-sky-to-soil",
+      "frames": "frames/01-sky-to-soil",
+      "count": 91
+    },
+    {
+      "id": "02-root-and-shoot",
+      "frames": "frames/02-root-and-shoot",
+      "count": 91
+    },
+    {
+      "id": "03-through-the-trunk",
+      "frames": "frames/03-through-the-trunk",
+      "count": 91
+    },
+    {
+      "id": "04-trunk-to-branch",
+      "frames": "frames/04-trunk-to-branch",
+      "count": 91
+    },
+    {
+      "id": "05-branch-to-fruit",
+      "frames": "frames/05-branch-to-fruit",
+      "count": 91
+    }
   ]
 }

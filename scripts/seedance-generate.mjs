@@ -127,6 +127,27 @@ async function waitForTask(shot, taskId) {
   throw new Error(`${shot.id} timed out after 30 minutes.`);
 }
 
+async function downloadVideo(videoUrl, destination, attempts = 4) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const response = await fetch(videoUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const buffer = Buffer.from(await response.arrayBuffer());
+      if (buffer.length < 100_000) throw new Error(`response was only ${buffer.length} bytes`);
+      await writeFile(destination, buffer);
+      return;
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) {
+        console.log(`download interrupted; retrying ${attempt}/${attempts - 1}`);
+        await new Promise((resolve) => setTimeout(resolve, attempt * 1500));
+      }
+    }
+  }
+  throw new Error(`download failed after ${attempts} attempts: ${lastError?.message || lastError}`);
+}
+
 for (const shot of selected) {
   const destination = path.join(outputDir, `${shot.id}.mp4`);
   try {
@@ -149,9 +170,7 @@ for (const shot of selected) {
   result = await waitForTask(shot, taskId);
   const videoUrl = findVideoUrl(result);
   if (!videoUrl) throw new Error(`${shot.id}: completed response did not include a video URL: ${JSON.stringify(result)}`);
-  const videoResponse = await fetch(videoUrl);
-  if (!videoResponse.ok) throw new Error(`${shot.id}: download failed: HTTP ${videoResponse.status}`);
-  await writeFile(destination, Buffer.from(await videoResponse.arrayBuffer()));
+  await downloadVideo(videoUrl, destination);
   cache.tasks[shot.id] = { ...cache.tasks[shot.id], status: 'downloaded', videoUrl, destination, downloadedAt: new Date().toISOString() };
   await persist();
   console.log(`${shot.id}: saved ${destination}`);

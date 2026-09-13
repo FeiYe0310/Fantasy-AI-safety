@@ -25,8 +25,9 @@ const exists = async (filename) => {
 if (planOnly) {
   console.log(`Opening frame: ${spec.openingFrame}`);
   for (const [index, shot] of spec.shots.entries()) {
-    const targetExists = await exists(path.resolve(root, shot.targetFrame));
-    console.log(`${index + 1}. ${shot.id} -> ${shot.targetFrame} [${targetExists ? 'ready' : 'missing'}]`);
+    const targetExists = shot.targetFrame ? await exists(path.resolve(root, shot.targetFrame)) : true;
+    const targetLabel = shot.targetFrame || 'actual generated final frame';
+    console.log(`${index + 1}. ${shot.id} -> ${targetLabel} [${targetExists ? 'ready' : 'missing'}]`);
   }
   console.log('Plan only: no uploads, tasks or generation charges were created.');
   process.exit(0);
@@ -39,20 +40,38 @@ let previousEnd = path.resolve(root, spec.openingFrame);
 for (const [index, shot] of spec.shots.entries()) {
   const startExtension = path.extname(previousEnd) || '.jpg';
   const startName = `${String(index + 1).padStart(2, '0')}-start${startExtension}`;
-  const targetSource = path.resolve(root, shot.targetFrame);
-  const targetExtension = path.extname(targetSource) || '.png';
-  const targetName = `${String(index + 1).padStart(2, '0')}-target${targetExtension}`;
   const endName = `${String(index + 1).padStart(2, '0')}-end.jpg`;
   const startPath = path.join(sourceDir, startName);
   const endPath = path.join(sourceDir, endName);
   await copyFile(previousEnd, startPath);
-  await copyFile(targetSource, path.join(sourceDir, targetName));
+
+  let targetName;
+  if (shot.targetFrame) {
+    const targetSource = path.resolve(root, shot.targetFrame);
+    const targetExtension = path.extname(targetSource) || '.png';
+    targetName = `${String(index + 1).padStart(2, '0')}-target${targetExtension}`;
+    await copyFile(targetSource, path.join(sourceDir, targetName));
+  }
+
+  const referenceFrames = [];
+  for (const [referenceIndex, referenceFrame] of (shot.referenceFrames || []).entries()) {
+    const referenceSource = path.resolve(root, referenceFrame);
+    const referenceExtension = path.extname(referenceSource) || '.png';
+    const referenceName = `${String(index + 1).padStart(2, '0')}-reference-${String(referenceIndex + 1).padStart(2, '0')}${referenceExtension}`;
+    await copyFile(referenceSource, path.join(sourceDir, referenceName));
+    referenceFrames.push(referenceName);
+  }
 
   const runtimeSpec = {
     ...spec,
     sourceDir: path.relative(root, sourceDir),
     workDir: path.relative(root, workDir),
-    shots: [{ ...shot, start: startName, end: targetName }],
+    shots: [{
+      ...shot,
+      start: startName,
+      ...(targetName ? { end: targetName } : {}),
+      ...(referenceFrames.length ? { referenceFrames } : {}),
+    }],
   };
   await writeFile(runtimeManifest, `${JSON.stringify(runtimeSpec, null, 2)}\n`);
   await run(process.execPath, ['scripts/seedance-generate.mjs', `--manifest=${runtimeManifest}`, `--shot=${shot.id}`]);

@@ -45,22 +45,22 @@ const chapters = [
     note: 'Verification must scale inside the path of capability, not arrive after it.',
   },
   {
-    id: 'branch', at: .72, side: 'right', kicker: 'V · THE BRANCH', title: ['What scaled', 'remained traceable.'],
+    id: 'branch', at: .72, side: 'right', kicker: 'V · THE TRANSFER', title: ['The fruit passed', 'its evidence forward.'],
     paragraphs: [
-      'The camera climbed through trunk and branch without abandoning the core. Fibres crossed the foreground; the angle changed; the light widened. Continuity turned movement into evidence.',
-      'A robust safety system needs the same structure: independent checks that can disagree, records that survive handoffs, and intervention points that remain available under pressure.',
-      'The goal is not a flawless story told after the event. It is a living chain of evidence strong enough to change the event before the branch breaks.',
+      'At maturity, the olive did not keep verification as decoration. Its gold moved visibly through fruit stem, twig, and leaf stalk until the complete evidence path lived inside one ordinary green leaf.',
+      'As the transfer completed, the fruit became a healthy black olive—no glow, no monument, no claim to exceptional status. Capability could look ordinary because its evidence had not been lost.',
+      'Nüwa entered the same space quietly and took the leaf by its stem. The camera followed the evidence, not the goddess, upward through the crown.',
     ],
-    note: 'A result is governable when its path can still be inspected and changed.',
+    note: 'Trust becomes possible when evidence survives the handoff.',
   },
   {
-    id: 'join', at: .9, kicker: 'VI · THE FRUIT', title: ['Safety became something', 'the world could hold.'],
+    id: 'join', at: .9, kicker: 'VI · THE REPAIR', title: ['Every leaf carried evidence.', 'Together, they held the sky.'],
     paragraphs: [
-      'The golden core reached open air and became one ordinary olive: still small, still itself, now carrying the full path from fracture to root to crown.',
-      'The repaired sky is not a promise of perfect certainty. It is a world in which powerful systems remain answerable because verification grew with them from the beginning.',
-      'We are building that capacity with researchers, engineers, red-teamers, interpreters, and storytellers. Bring a verifier, expose a crack, reproduce a result, or help the next root grow stronger.',
+      'The leaf returned to the fracture where the story began. Its golden veins entered the broken network slowly, stabilising every branch before the sky could close.',
+      'A fine kintsugi seam remained: repair made visible, evidence preserved, failure available for inspection. Abundant verification tokens for powerful AI.',
+      'Join researchers, engineers, red-teamers, interpreters, and storytellers building the capacity to find cracks, carry evidence, and repair what powerful systems could break.',
     ],
-    note: 'Capability can flourish without leaving accountability underground.',
+    note: 'Safety does not erase the fracture. It makes the repair auditable.',
     actions: true,
   },
 ];
@@ -74,7 +74,7 @@ const windows = [
   { from: .86, to: 1 },
 ];
 
-const labels = ['SIGNAL', 'DESCENT', 'VERIFY', 'ASCEND', 'TRACE', 'FRUIT'];
+const labels = ['SIGNAL', 'DESCENT', 'VERIFY', 'ASCEND', 'TRANSFER', 'REPAIR'];
 
 const phaseOpacity = (progress, index) => {
   const start = windows[index].from;

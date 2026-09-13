@@ -1,0 +1,37 @@
+{
+  "version": "seedance-video-v28-ending",
+  "openingFrame": "artwork-source/olive-core-v27-chain/inputs/02-end.jpg",
+  "sourceDir": "artwork-source/olive-core-v28-ending/inputs",
+  "workDir": "artwork-source/seedance-video-v28-ending",
+  "defaults": {
+    "duration": 5,
+    "ratio": "16:9",
+    "resolution": "720p",
+    "generate_audio": false,
+    "watermark": false,
+    "styleLock": "Image 1 is always the exact opening frame and must be preserved at the start. Continue one uninterrupted upward clockwise camera journey in the same luminous nineteenth-century neoclassical oil painting: pale cerulean daylight from upper left, warm ivory atmosphere, translucent traditional glazes, soft sfumato, restrained linen-canvas texture, painterly and quiet rather than digitally sharp. Preserve one continuous physical world, one olive tree, one antique-gold evidence current, stable natural anatomy, natural-size olives and leaves, physical parallax, constant lens character, and the same forward camera direction. The antique gold is conserved matter: it may move through plant tissue but may never duplicate, teleport, vanish, or appear independently elsewhere. Continuous camera movement; maintain forward camera velocity; maintain camera direction; no pause; no frozen final pose; no cinematic hold; no fade out; no cut; no scene reset; no sudden camera restart; no text; no logo; no watermark. Motion must continue through the final frame, especially through the final one second."
+  },
+  "shots": [
+    {
+      "id": "06-core-ascent",
+      "model": "seedance-2.0",
+      "prompt": "Begin from the exact underground germination frame. The single warm antique-gold core visibly leaves the opened olive seed and climbs through the center of the living root and tender shoot. The camera pulls backward and rises in the same clockwise arc while soil and fine roots sweep close across the lens as an organic occlusion, revealing a natural cinematic ground cutaway where the roots, earth line, trunk, and crown of the same rapidly maturing olive tree can be understood together. Never become a diagram. The one gold core remains continuously visible as a tiny sap-like pulse traveling seed to root center to shoot to trunk; the camera follows it upward. Push back toward the trunk without cutting as bark crosses the lens, then travel with the same pulse through trunk, main branch, and outer twig into one normal-size mature dark green olive. End close to that fruit with the conserved gold glowing only from within and through one fine longitudinal seam. The camera is still rising and orbiting past the fruit at full gentle velocity on the last frame; do not slow down or settle. No laser, circuit, HUD, transparent pipe, jewel, giant fruit, extra glowing source, magic beam, or timelapse jump."
+    },
+    {
+      "id": "07-fruit-to-leaf",
+      "model": "seedance-2.0",
+      "referenceFrames": [
+        "artwork-source/nuwa-olive-finale-v3-identity/nuwa-character-model.png"
+      ],
+      "prompt": "Image 1 is the true final frame of Clip 06 and the only starting composition. Image 2 is character identity and clothing reference only, never a replacement opening frame. Continue the exact camera velocity and upward clockwise direction past the gold-lit mature olive, revealing one adjacent completely ordinary silver-green olive leaf on the same twig. Show the same finite gold physically leaving the fruit interior, moving visibly through its fruit stem, along the woody twig, into the leaf stalk, then along the leaf main vein and finally its secondary veins. The transfer is simultaneous and conserved: wherever the moving gold leaves, the fruit darkens by the same amount. When the last gold exits, the healthy intact fruit is an ordinary mature purple-black olive with no glow, while the leaf surface remains natural green and only its fine vein network carries restrained antique gold. Keep both together briefly while the camera still breathes forward. Without a cut, Nüwa gradually enters from the right background through shallow depth of field: first her soft ivory-and-jade sleeve, then her side/back silhouette and one anatomically correct feminine hand. Keep her face obscure and painterly; she never becomes the visual subject. Her thumb and index finger approach, touch the leaf stalk, detach it naturally, and hold the one small leaf without covering it. No flying-to-hand shortcut. End with the gold-veined leaf already rising in her hand and the camera already following it upward through the canopy at unchanged velocity. Preserve the established Nüwa hair and robe from Image 2, but show no serpent scales, dry skin texture, ruler, compass, weapon, hero pose, front portrait, second hand, malformed fingers, giant leaf, colored leaves, particles, spell effect, or extra gold."
+    },
+    {
+      "id": "08-mend-the-sky",
+      "model": "seedance-2.0",
+      "referenceFrames": [
+        "artwork-source/olive-core-v26/01-fall.png"
+      ],
+      "prompt": "Image 1 is the true final frame of Clip 07 and the only starting composition. Image 2 is a geography reference for the same original sky fracture, valley, light, and cloud world; do not reset to it. Continue following the same small gold-veined leaf in Nüwa's hand upward at the exact inherited camera velocity and clockwise direction. Foreground olive leaves, branches, and her trailing sleeve successively sweep across the lens as natural moving occlusions while the camera passes through the crown; the tree falls continuously below and the same pale sky fills the frame. Reveal the original branching fracture from the opening story without a cut. Keep Nüwa peripheral: only the hand, sleeve, or distant back silhouette may remain. The leaf tip and its main gold vein gently meet the lower tip of the crack. The same conserved gold visibly travels from secondary leaf veins into the main vein, through the leaf tip, and then along the existing branching fracture in both directions. Repair is slow and legible: spreading gold first stabilizes each branch, reconnects the broken edges, and gradually narrows the gap until the sky closes. No instant fix. As the leaf's veins become ordinary green again, leave one extremely thin restrained pale-gold kintsugi seam tracing the healed fracture. The hand and leaf continue upward and out of frame while the camera keeps gliding into a calm bright sky with slight cloud motion. The final frame remains in forward motion and contains only the peaceful sky, subtle clouds, and the fine auditable gold repair line. No bandage-like leaf stuck to sky, laser, energy ball, magic circle, lightning, explosion, particles, lens flare, battle, spell pose, giant leaf, flock, text, or new crack."
+    }
+  ]
+}

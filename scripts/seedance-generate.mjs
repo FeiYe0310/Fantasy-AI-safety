@@ -28,8 +28,8 @@ const selected = process.argv.includes('--all')
 if (!selected.length) throw new Error('Select --all or one or more --shot=<id> values.');
 
 const estimatedRates = {
-  '480p': { 'seedance-2.0-mini': 0.097, 'seedance-2.0-fast': 0.21, 'seedance-2.5': 0.6 },
-  '720p': { 'seedance-2.0-mini': 0.21, 'seedance-2.0-fast': 0.46, 'seedance-2.5': 1.36 },
+  '480p': { 'seedance-2.0-mini': 0.097, 'seedance-2.0-fast': 0.21, 'seedance-2.0': 0.44, 'seedance-2.5': 0.6 },
+  '720p': { 'seedance-2.0-mini': 0.21, 'seedance-2.0-fast': 0.46, 'seedance-2.0': 0.94, 'seedance-2.5': 1.36 },
   '1080p': { 'seedance-2.5': 2.55 },
 };
 const estimatedCost = selected.reduce((sum, shot) => {
@@ -158,7 +158,8 @@ for (const shot of selected) {
   } catch {}
 
   console.log(`${shot.id}: uploading references`);
-  const references = await Promise.all([uploadImage(shot.start), uploadImage(shot.end)]);
+  const referenceNames = [shot.start, ...(shot.referenceFrames || []), ...(shot.end ? [shot.end] : [])];
+  const references = await Promise.all(referenceNames.map(uploadImage));
   let taskId = cache.tasks[shot.id]?.id;
   let result;
   if (taskId && !['failed', 'error', 'cancelled', 'canceled'].includes(cache.tasks[shot.id]?.status)) {

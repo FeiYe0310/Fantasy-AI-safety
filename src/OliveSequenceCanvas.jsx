@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 const clamp = (value) => Math.min(1, Math.max(0, value));
-const MEDIA_ROOT = 'olive-core-v28';
+const MEDIA_ROOT = 'olive-core-v29';
 const FALLBACK_ROOT = 'olive-core-v26';
 const GLOBAL_FOCUS = [.67, .5];
 const MOBILE_FOCUS = [.69, .5];

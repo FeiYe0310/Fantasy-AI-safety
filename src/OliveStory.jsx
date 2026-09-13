@@ -54,7 +54,7 @@ const chapters = [
     note: 'Trust becomes possible when evidence survives the handoff.',
   },
   {
-    id: 'join', at: .9, kicker: 'VI · THE REPAIR', title: ['Every leaf carried evidence.', 'Together, they held the sky.'],
+    id: 'join', at: .9, kicker: 'VI · NÜWA MENDS THE SKY', title: ['Every leaf carried evidence.', 'Together, they held the sky.'],
     paragraphs: [
       'The leaf returned to the fracture where the story began. Its golden veins entered the broken network slowly, stabilising every branch before the sky could close.',
       'A fine kintsugi seam remained: repair made visible, evidence preserved, failure available for inspection. Abundant verification tokens for powerful AI.',

@@ -1,0 +1,13 @@
+{
+  "segment": "08-repair-expanded",
+  "count": 93,
+  "fps": 18,
+  "width": 1280,
+  "height": 720,
+  "sources": [
+    "07-fruit-to-leaf/0090.jpg",
+    "01-nuwa-full-body-open-fracture.png",
+    "08-mend-the-sky/0030-0055.jpg",
+    "02-healed-sky-kintsugi.png"
+  ]
+}
